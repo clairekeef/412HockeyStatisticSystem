@@ -2,7 +2,8 @@ package src.model;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Map; 
+
 
 public class Statistics {
     private DataRepository dataRepository;
@@ -63,7 +64,7 @@ public class Statistics {
             System.out.println("Statistics.getTeamStats called");
             System.out.println("Team ID: " + teamId);
             System.out.println("Tournament ID: " + tournamentId);
-
+            
             return new TeamStats(teamId, 20.0, 4.0);
         }
 

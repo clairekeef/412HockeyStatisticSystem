@@ -210,6 +210,8 @@ public class Tester {
 
     //Test performance data evaluation
     public static void testPerformanceDataEvaluation() {
+        System.out.println("--- Testing Performance Data Evaluation ---");
+
         TeamStats teamStats = new TeamStats("USA", 2, 0);
         PlayerStats playerStats = new PlayerStats("Joe Smith", 1, 0);
         PerformanceDataEvaluation evaluation = new PerformanceDataEvaluation(0, null);
@@ -243,6 +245,7 @@ public class Tester {
 
     //Test Team
     public static void testTeam() {
+        System.out.println("--- Testing Team ---");
         List<String> roster = new ArrayList<>();
         roster.add("Joe Smith");
         roster.add("Ryan Johnson");

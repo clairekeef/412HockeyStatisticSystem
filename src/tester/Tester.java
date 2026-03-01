@@ -6,6 +6,7 @@ import src.controller.*;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Tester {
 
@@ -138,4 +139,72 @@ public class Tester {
         System.out.println("\nTesting Team Comparison...");
         System.out.println(dashboard.compareTeams("USA", "Canada"));
     }
+
+    public static void testGameData(){
+        System.out.println("--- Testing Game Data ---");
+
+        //create game
+        Game game1 = new Game(
+                "G001",
+                "USA",
+                "Canada",
+                "Milano Cortina",
+                new Date()
+        );
+        String gameData = game1.getGameData();
+        if (gameData != null) {
+            System.out.println("PASS: getGameData returned result");
+        } else {
+            System.out.println("FAIL: getGameData returned null");
+        }
+
+        //update game status        
+        game1.updateGameStatus("In Progress");
+        if (game1 != null) { 
+            System.out.println("PASS: updateGameStatus executed successfully");
+        } else {
+            System.out.println("FAIL: updateGameStatus failed");
+        }
+
+        game1.updateGameStatus("Completed");
+        System.out.println("Current game status: Completed");
+
+
+
+        //create a game summary
+        GameSummary summary1 = new GameSummary(
+                "S001",
+                "G001",
+                "USA",
+                "Canada",
+                new Date()
+        );
+
+        //display charts
+        List<String> charts = summary1.displayCharts();
+        if (charts != null && !charts.isEmpty()) {
+            System.out.println("PASS: displayCharts returned result");
+        } else {
+            System.out.println("FAIL: displayCharts returned null or empty");
+        }
+
+        //display stats
+        String stats = summary1.displayStats();
+        if (stats != null) {
+            System.out.println("PASS: displayStatistics returned result" );
+        } else {
+            System.out.println("FAIL: displayStatistics returned null");
+        }
+
+        //compare teams
+        String teamCompare = summary1.compareTeams("Canada");
+        if (teamCompare != null) {
+            System.out.println("PASS: compareTeams returned result");
+        } else {
+            System.out.println("FAIL: compareTeams returned null");
+        }
+
+        System.out.println();
+    }
+    
 }

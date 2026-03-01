@@ -12,3 +12,8 @@ cek5677 - Claire Keef
 
 apd5982- Avery Dayal 
     Implemented: Statistics, Stats, PlayerStats, TeamStats, DataRepository, MetricCalculator, UserManagement, User, UserRole, Profile, Preferences; Created Tester tests for above classes; Added above classes/interfaces/enums to class UML Diagram; Activity and Sequence diagram for Compare Teams/Players Across Tournaments
+
+mmb7354 - Matthew Bolger
+    Implemented: PerformanceDataEvaluation and Team with testing for all classes implemented.
+    I adjusted the UML diagram for each class that was updated throughout the coding process.
+    I added all methods to both classes connecting them to the rest of the project.

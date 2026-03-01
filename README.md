@@ -6,6 +6,9 @@ Also include the effort contributions of each of the team-member in the readme f
 Team Member ID + Name	Contribution in The Particular Assignment
 
 cek5677 - Claire Keef
+    Implemented Deshboard View (interacts with most model classes), Authentication Module, Testing for all classes implemented
+    Adjusted UML diagram to match implementation
+    Activity and Sequence Diagrams for Dashboard Overview use case
 
 apd5982- Avery Dayal 
     Implemented: Statistics, Stats, PlayerStats, TeamStats, DataRepository, MetricCalculator, UserManagement, User, UserRole, Profile, Preferences; Created Tester tests for above classes; Added above classes/interfaces/enums to class UML Diagram; Activity and Sequence diagram for Compare Teams/Players Across Tournaments

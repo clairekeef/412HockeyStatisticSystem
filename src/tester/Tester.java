@@ -18,6 +18,8 @@ public class Tester {
 
         testAuthenticationFlow();
         testStatisticsAPIs();
+        testPerformanceDataEvaluation();
+        testTeam();
 
         System.out.println("\n===== SYSTEM TEST COMPLETE =====");
     }

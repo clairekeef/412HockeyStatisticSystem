@@ -41,9 +41,18 @@ public class GameSummary {
         return performancePatterns;
     }
 
-    public String displayStatistics(){
+    public String displayStats(){
+        System.out.println("Stats Display");
+        return "Stats Data";
+    }
+
+    public String compareTeams(String opponentTeam){
         System.out.println("Team comparison with: " + opponentTeam);
         return "Comparison Result";
+    }
+
+    public String getSummaryID(){
+        return summaryID;
     }
 
     public Date getDate() {

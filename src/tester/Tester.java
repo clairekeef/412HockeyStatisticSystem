@@ -130,10 +130,7 @@ public class Tester {
 
         // Test game details
         System.out.println("\nTesting Game Details...");
-        //GameSummary summary = dashboard.viewGameDetails("G1");
-        //System.out.println(summary.getMatchup());
-        //System.out.println(summary.getScore());
-        //System.out.println(summary.getHighlight());
+        GameSummary summary = dashboard.viewGameDetails("G1");
 
         // Test comparison
         System.out.println("\nTesting Team Comparison...");

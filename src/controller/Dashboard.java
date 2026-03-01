@@ -1,7 +1,11 @@
 package src.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+
+import src.model.*;
 
 public class Dashboard {
 
@@ -19,14 +23,15 @@ public class Dashboard {
 
     }
 
-     /* public GameSummary viewGameDetails(String gameId) {
+     public GameSummary viewGameDetails(String gameId) {
 
         System.out.println("Dashboard: Viewing details for game " + gameId);
 
         // Stubbed data
-        return new GameSummary("USA vs Canada", "3-2", "Overtime thriller");
+        return new GameSummary("sum1", "game1", "USA","Canada",new Date());
+
     }
-    */
+    
 
     public String viewPlayerStatistics(String playerId) {
 

@@ -2,6 +2,7 @@ package src.tester;
 
 import src.controller.AuthenticationModule;
 import src.model.*;
+import src.view.Dashboard;
 import src.controller.*;
 
 import java.util.List;

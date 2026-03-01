@@ -1,4 +1,4 @@
-package src.controller;
+package src.view;
 
 import java.util.Date;
 import java.util.HashMap;

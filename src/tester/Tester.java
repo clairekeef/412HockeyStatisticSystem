@@ -2,6 +2,7 @@ package src.tester;
 
 import src.controller.AuthenticationModule;
 import src.model.*;
+import src.controller.*;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -119,5 +120,22 @@ public class Tester {
         }
 
         System.out.println();
+
+        //claire - testing
+        Dashboard dashboard = new Dashboard();
+        // Test tournament overview
+        System.out.println("Testing Tournament Overview...");
+        System.out.println(dashboard.viewTournamentOverview());
+
+        // Test game details
+        System.out.println("\nTesting Game Details...");
+        //GameSummary summary = dashboard.viewGameDetails("G1");
+        //System.out.println(summary.getMatchup());
+        //System.out.println(summary.getScore());
+        //System.out.println(summary.getHighlight());
+
+        // Test comparison
+        System.out.println("\nTesting Team Comparison...");
+        System.out.println(dashboard.compareTeams("USA", "Canada"));
     }
 }

@@ -10,7 +10,7 @@ public class Game {
     private String opponentTeam;
     private String gameStatus;
 
-    public Game(String gameID, Date date, String teamCountry, String opponentTeam, String location){
+    public Game(String gameID, String teamCountry, String opponentTeam, String location, Date date){
         this.gameID = gameID;
         this.date = date;
         this.location = location;

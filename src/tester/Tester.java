@@ -205,5 +205,91 @@ public class Tester {
 
         System.out.println();
     }
+
+    //Test performance data evaluation
+    public static void testPerformanceDataEvaluation() {
+        TeamStats teamStats = new TeamStats("USA", 2, 0);
+        PlayerStats playerStats = new PlayerStats("Joe Smith", 1, 0);
+        PerformanceDataEvaluation evaluation = new PerformanceDataEvaluation(0, null);
+
+        // Test player method
+        String playerInfo = evaluation.player(playerStats);
+        if (playerInfo != null) {
+            System.out.println("PASS: player method returned result");
+        } else {
+            System.out.println("FAIL: player method returned null");
+        }
+
+        // Test calculateOverallPerformance
+        double overallPerformance = evaluation.calculateOverallPerformance(teamStats, playerStats);
+        if (overallPerformance >= 0) {
+            System.out.println("PASS: calculateOverallPerformance returned value");
+        } else {
+            System.out.println("FAIL: calculateOverallPerformance returned invalid value");
+        }
+
+        // Test getEvaluation
+        String evalResult = evaluation.getEvaluation();
+        if (evalResult != null) {
+            System.out.println("PASS: getEvaluation returned result");
+        } else {
+            System.out.println("FAIL: getEvaluation returned null");
+        }
+
+        System.out.println();
+    }
+
+    //Test Team
+    public static void testTeam() {
+        List<String> roster = new ArrayList<>();
+        roster.add("Joe Smith");
+        roster.add("Ryan Johnson");
+
+        Team team = new Team("USA", roster);
+
+        // Test getTeamCountry
+        String country = team.getTeamCountry();
+        if (country != null) {
+            System.out.println("PASS: getTeamCountry returned result");
+        } else {
+            System.out.println("FAIL: getTeamCountry returned null");
+        }
+
+        // Test getRoster
+        List<String> teamRoster = team.getRoster();
+        if (teamRoster != null && !teamRoster.isEmpty()) {
+            System.out.println("PASS: getRoster returned result");
+        } else {
+            System.out.println("FAIL: getRoster returned null or empty");
+        }
+
+        // Test getTeamStats
+        Statistics stats = team.getTeamStats();
+        if (stats != null) {
+            System.out.println("PASS: getTeamStats returned object");
+        } else {
+            System.out.println("FAIL: getTeamStats returned null");
+        }
+
+        // Test getOpponentHistory
+        List<GameSummary> history = team.getOpponentHistory("Canada");
+        if (history != null) {
+            System.out.println("PASS: getOpponentHistory returned list");
+        } else {
+            System.out.println("FAIL: getOpponentHistory returned null");
+        }
+
+        // Test updateRoster
+        List<String> newRoster = new ArrayList<>();
+        newRoster.add("Player3");
+        team.updateRoster(newRoster);
+        if (team.getRoster().contains("Player3")) {
+            System.out.println("PASS: updateRoster updated the roster successfully");
+        } else {
+            System.out.println("FAIL: updateRoster failed to update the roster");
+        }
+
+        System.out.println();
+    }
     
 }

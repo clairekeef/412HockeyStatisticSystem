@@ -17,3 +17,6 @@ mmb7354 - Matthew Bolger
     Implemented: PerformanceDataEvaluation and Team with testing for all classes implemented.
     I adjusted the UML diagram for each class that was updated throughout the coding process.
     I added all methods to both classes connecting them to the rest of the project.
+    
+mfr5829 - Marcela Ramirez Vadillo
+    Implemented: Game and Game Summary classes. Tested these classes in the Tester and updated the UML diagram with all attributes and methods implemented. Also added activity and sequence diagram for View Game Information and Create Game Summary.

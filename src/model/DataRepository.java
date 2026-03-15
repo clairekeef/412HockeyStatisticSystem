@@ -12,31 +12,40 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * DataRepository loads and stores player data from a CSV file,
+ * and provides query methods used by the rest of the system.
+ *
+ * CSV format:
+ *   Name,Group,Country,Position,GP,G,A,PTS,PIM,PPG
+ */
 public class DataRepository {
 
-    // Keyed by player name 
+    // Keyed by player name (case-insensitive lookup via toLowerCase)
     private final Map<String, PlayerStats> playersByName = new HashMap<>();
 
-    // Keyed by country name 
+    // Keyed by country name (case-insensitive)
     private final Map<String, List<PlayerStats>> playersByCountry = new HashMap<>();
 
-    // Keyed by group label
+    // Keyed by group label (e.g. "A")
     private final Map<String, List<PlayerStats>> playersByGroup = new HashMap<>();
 
     // Master list preserving CSV order
     private final List<PlayerStats> allPlayers = new ArrayList<>();
 
     public DataRepository() {
-        loadCSV("src/model/players.csv");
+        loadCSV("Players.csv");
         System.out.println("DataRepository initialized — " + allPlayers.size() + " players loaded.");
     }
 
-
+    /**
+     * Secondary constructor that accepts an explicit CSV path (useful for tests
+     * that need to pass a different file or an absolute path).
+     */
     public DataRepository(String csvPath) {
         loadCSV(csvPath);
         System.out.println("DataRepository initialized — " + allPlayers.size() + " players loaded.");
     }
-
 
     private void loadCSV(String path) {
         InputStream stream = getClass().getClassLoader().getResourceAsStream(path);
@@ -70,7 +79,14 @@ public class DataRepository {
         }
     }
 
-
+    /**
+     * Parses a single CSV row and registers the resulting PlayerStats object
+     * in all internal indexes.
+     *
+     * Expected columns (0-based):
+     *   0 Name | 1 Group | 2 Country | 3 Position |
+     *   4 GP   | 5 G     | 6 A       | 7 PTS      | 8 PIM | 9 PPG
+     */
     private void parseAndStore(String line) {
         String[] cols = line.split(",", -1);
         if (cols.length < 10) {
@@ -90,7 +106,8 @@ public class DataRepository {
             int    pim      = Integer.parseInt(cols[8].trim());
             int    ppg      = Integer.parseInt(cols[9].trim());
 
-            PlayerStats player = new PlayerStats(name, group, country, position, gp, goals, assists, pts, pim, ppg);
+            PlayerStats player = new PlayerStats(name, group, country, position,
+                                                  gp, goals, assists, pts, pim, ppg);
             allPlayers.add(player);
 
             playersByName.put(name.toLowerCase(), player);
@@ -108,7 +125,7 @@ public class DataRepository {
         }
     }
 
-    /** Returns all loaded players  */
+    /** Returns all loaded players (unmodifiable). */
     public List<PlayerStats> getAllPlayers() {
         return Collections.unmodifiableList(allPlayers);
     }
@@ -142,6 +159,7 @@ public class DataRepository {
 
     /**
      * Returns all players that play the given position (case-insensitive).
+     * Common values: "Forward", "Defence".
      */
     public List<PlayerStats> getPlayersByPosition(String position) {
         if (position == null) return Collections.emptyList();
@@ -193,7 +211,7 @@ public class DataRepository {
     }
 
     /**
-     * Returns a map of country total points, useful for team-level comparisons.
+     * Returns a map of country → total points, useful for team-level comparisons.
      */
     public Map<String, Integer> getPointsByCountry() {
         Map<String, Integer> result = new HashMap<>();
@@ -236,10 +254,6 @@ public class DataRepository {
             .mapToDouble(p -> extractMetric(p, metric))
             .sum();
     }
-
-    // -----------------------------------------------------------------------
-    // Internal helpers
-    // -----------------------------------------------------------------------
 
     private double extractMetric(PlayerStats p, String metric) {
         if (metric == null) return 0.0;

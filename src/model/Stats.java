@@ -1,6 +1,11 @@
 package src.model;
 
+/**
+ * Represents a single generic statistic: a named entity paired with a numeric value.
+ * Used by Statistics.normalizeData() and for general metric storage.
+ */
 public class Stats {
+
     private String id;
     private double value;
 
@@ -15,5 +20,14 @@ public class Stats {
 
     public double getValue() {
         return value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return "Stats{id='" + id + "', value=" + value + "}";
     }
 }

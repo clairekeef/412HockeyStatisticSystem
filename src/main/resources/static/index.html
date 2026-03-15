@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Dashboard</h1>
+
+<button onclick="loadDashboard()">Load Dashboard</button>
+
+<p id="result"></p>
+
+<script>
+function loadDashboard() {
+    fetch("/dashboard")
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById("result").innerText = data;
+        });
+}
+</script>
+
+</body>
+</html>

@@ -33,6 +33,7 @@ public class DashboardController {
         String[] parts = line.split(",");
         Map<String, Object> p = new HashMap<>();
         p.put("name", parts[0]);
+        p.put("Country", parts[2]);
         p.put("GP",  Integer.parseInt(parts[4]));
         p.put("G",   Integer.parseInt(parts[5]));
         p.put("A",   Integer.parseInt(parts[6]));

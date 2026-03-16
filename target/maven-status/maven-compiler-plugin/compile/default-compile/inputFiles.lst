@@ -1,4 +1,6 @@
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
 C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Game.java
 C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\controller\AuthenticationModule.java
 C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\MetricCalculator.java
@@ -22,6 +24,7 @@ C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\
 C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\HockeyStatisticsApplication.java
 =======
 <<<<<<< HEAD
+>>>>>>> a3a85598ae0d629a65fe2ed3ca77e9aef1973a7b
 /Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/controller/AuthenticationModule.java
 /Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/UserManagement.java
 /Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/HockeyStatisticsApplication.java
@@ -43,6 +46,8 @@ C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\
 /Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/tester/Tester.java
 /Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/Statistics.java
 /Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/User.java
+<<<<<<< HEAD
+=======
 =======
 C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\User.java
 C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Preferences.java
@@ -67,3 +72,4 @@ C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\
 C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Statistics.java
 >>>>>>> c90cb6ad49daec76fd1af0cd4a3406dc05136d01
 >>>>>>> 32748090fa1e18a957152acd4b1c27086e09c693
+>>>>>>> a3a85598ae0d629a65fe2ed3ca77e9aef1973a7b

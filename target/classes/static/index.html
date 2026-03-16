@@ -58,6 +58,11 @@
 <script>
   fetch("/players").then(res => res.json()).then(players => {
     window.playerData = players;
+    fetch("/players").then(res => res.json()).then(players => {
+  window.playerData = players;
+  console.log("sample country:", players[0].country);
+  populateDropdowns(players);
+});
     populateDropdowns(players);
   });
 
@@ -74,7 +79,7 @@
   function filterPlayers(slot) {
     const country = document.getElementById("filter-country" + slot).value;
     const filtered = country
-      ? window.playerData.filter(p => p.country === country)
+      ? window.playerData.filter(p => p.Country === country)
       : window.playerData;
     const sel = document.getElementById("player" + slot);
     sel.innerHTML = "";
@@ -91,7 +96,7 @@
     const p2 = window.playerData.find(p => p.name === name2);
     const winner = p1[metric] > p2[metric] ? p1.name : p2[metric] > p1[metric] ? p2.name : "Tie";
     document.getElementById("result").innerText =
-      `${p1.name}: ${p1[metric]}\n${p2.name}: ${p2[metric]}\n\nWinner: ${winner}`;
+      `${p1.name}: ${p1[metric]}\n${p2.name}: ${p2[metric]}`;
   }
 
   function loadDashboard() {

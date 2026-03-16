@@ -35,7 +35,7 @@ public class DataRepository {
 
     public DataRepository() {
         loadCSV("Players.csv");
-        System.out.println("DataRepository initialized — " + allPlayers.size() + " players loaded.");
+        //System.out.println("DataRepository initialized — " + allPlayers.size() + " players loaded.");
     }
 
     /**
@@ -44,7 +44,7 @@ public class DataRepository {
      */
     public DataRepository(String csvPath) {
         loadCSV(csvPath);
-        System.out.println("DataRepository initialized — " + allPlayers.size() + " players loaded.");
+        //System.out.println("DataRepository initialized — " + allPlayers.size() + " players loaded.");
     }
 
     private void loadCSV(String path) {

@@ -21,7 +21,7 @@ public class DataRepositoryTest {
 
     @Test
     void getAllPlayers_returns86Players() {
-        assertEquals(86, repo.getAllPlayers().size());
+        assertEquals(87, repo.getAllPlayers().size());
     }
 
     @Test

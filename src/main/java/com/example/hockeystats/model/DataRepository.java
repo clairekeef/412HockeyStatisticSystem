@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * DataRepository loads and stores player data from a CSV file,
+ * DataRepository loads and stores player data from the CSV file,
  * and provides query methods used by the rest of the system.
  *
  * CSV format:
@@ -82,10 +82,6 @@ public class DataRepository {
     /**
      * Parses a single CSV row and registers the resulting PlayerStats object
      * in all internal indexes.
-     *
-     * Expected columns (0-based):
-     *   0 Name | 1 Group | 2 Country | 3 Position |
-     *   4 GP   | 5 G     | 6 A       | 7 PTS      | 8 PIM | 9 PPG
      */
     private void parseAndStore(String line) {
         String[] cols = line.split(",", -1);

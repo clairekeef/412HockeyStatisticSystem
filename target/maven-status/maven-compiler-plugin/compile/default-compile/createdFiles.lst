@@ -14,7 +14,6 @@ com/example/hockeystats/controller/AuthenticationModule.class
 com/example/hockeystats/model/User.class
 com/example/hockeystats/view/Dashboard.class
 com/example/hockeystats/model/UserRole.class
-com/example/hockeystats/tester/Tester.class
 com/example/hockeystats/controller/DashboardController.class
 com/example/hockeystats/model/Statistics.class
 com/example/hockeystats/model/GameSummary.class

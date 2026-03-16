@@ -1,30 +1,3 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Game.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\controller\AuthenticationModule.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\MetricCalculator.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\UserRole.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\PlayerStats.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Preferences.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Profile.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Team.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\User.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\UserManagement.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\view\Dashboard.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\GameSummary.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\PerformanceDataEvaluation.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\tester\Tester.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\controller\GameController.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Stats.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\TeamStats.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Statistics.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\controller\DashboardController.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\DataRepository.java
-C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\HockeyStatisticsApplication.java
-=======
-<<<<<<< HEAD
->>>>>>> a3a85598ae0d629a65fe2ed3ca77e9aef1973a7b
 /Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/controller/AuthenticationModule.java
 /Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/UserManagement.java
 /Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/HockeyStatisticsApplication.java
@@ -43,33 +16,5 @@ C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\
 /Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/TeamStats.java
 /Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/MetricCalculator.java
 /Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/controller/GameController.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/tester/Tester.java
 /Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/Statistics.java
 /Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/User.java
-<<<<<<< HEAD
-=======
-=======
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\User.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Preferences.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\controller\AuthenticationModule.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\DataRepository.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\controller\GameController.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Profile.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\tester\Tester.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Stats.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Game.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\MetricCalculator.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\PlayerStats.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\TeamStats.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\view\Dashboard.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\HockeyStatisticsApplication.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Team.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\UserManagement.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\controller\DashboardController.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\GameSummary.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\PerformanceDataEvaluation.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\UserRole.java
-C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Statistics.java
->>>>>>> c90cb6ad49daec76fd1af0cd4a3406dc05136d01
->>>>>>> 32748090fa1e18a957152acd4b1c27086e09c693
->>>>>>> a3a85598ae0d629a65fe2ed3ca77e9aef1973a7b

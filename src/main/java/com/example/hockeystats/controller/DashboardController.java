@@ -20,7 +20,7 @@ public class DashboardController {
     }
 }
 
-// go to https://localhost:8080/ to view
+// go to http://localhost:8080/ to view
 
 /*
 mvn clean compile

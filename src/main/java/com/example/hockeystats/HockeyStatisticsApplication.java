@@ -11,3 +11,10 @@ public class HockeyStatisticsApplication {
     }
 
 }
+
+// go to http://localhost:8080/ to view
+
+/*
+mvn clean compile
+mvn spring-boot:run
+ */

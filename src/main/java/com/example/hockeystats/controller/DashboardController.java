@@ -11,3 +11,8 @@ public class DashboardController {
         return "Dashboard loaded!";
     }
 }
+
+/*
+mvn clean compile
+mvn spring-boot:run
+ */

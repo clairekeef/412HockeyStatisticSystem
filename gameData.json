@@ -1,0 +1,165 @@
+[
+  {
+    "gameID": "M-USA-CAN-2022",
+    "date": "2022-02-12",
+    "location": "Beijing National Indoor Stadium",
+    "teamCountry": "USA",
+    "opponentTeam": "Canada",
+    "gameStatus": "Preliminary Round – USA won 4–2"
+  },
+  {
+    "gameID": "M-ROC-CZE-2022",
+    "date": "2022-02-09",
+    "location": "Beijing National Indoor Stadium",
+    "teamCountry": "ROC",
+    "opponentTeam": "Czech Republic",
+    "gameStatus": "Group A Match – ROC won 4–2"
+  },
+  {
+    "gameID": "M-SWE-LAT-2022",
+    "date": "2022-02-10",
+    "location": "Wukesong Arena",
+    "teamCountry": "Sweden",
+    "opponentTeam": "Latvia",
+    "gameStatus": "Group C Match – Sweden won 3–2"
+  },
+  {
+    "gameID": "M-FIN-SVK-2022",
+    "date": "2022-02-10",
+    "location": "Beijing National Indoor Stadium",
+    "teamCountry": "Finland",
+    "opponentTeam": "Slovakia",
+    "gameStatus": "Group C Match – Finland won 6–2"
+  },
+  {
+    "gameID": "M-CAN-GER-2022",
+    "date": "2022-02-10",
+    "location": "Wukesong Arena",
+    "teamCountry": "Canada",
+    "opponentTeam": "Germany",
+    "gameStatus": "Group A Match – Canada won 5–1"
+  },
+  {
+    "gameID": "M-USA-GER-2022",
+    "date": "2022-02-13",
+    "location": "Beijing National Indoor Stadium",
+    "teamCountry": "USA",
+    "opponentTeam": "Germany",
+    "gameStatus": "Preliminary Round – USA won 3–2"
+  },
+  {
+    "gameID": "M-SUI-DEN-2022",
+    "date": "2022-02-11",
+    "location": "Wukesong Arena",
+    "teamCountry": "Switzerland",
+    "opponentTeam": "Denmark",
+    "gameStatus": "Group B Match – Denmark won 5–3"
+  },
+  {
+    "gameID": "M-SVK-GER-2022",
+    "date": "2022-02-16",
+    "location": "Beijing National Indoor Stadium",
+    "teamCountry": "Slovakia",
+    "opponentTeam": "Germany",
+    "gameStatus": "Quarterfinal – Slovakia won 4–0"
+  },
+  {
+    "gameID": "M-SWE-CAN-2022",
+    "date": "2022-02-16",
+    "location": "Wukesong Arena",
+    "teamCountry": "Sweden",
+    "opponentTeam": "Canada",
+    "gameStatus": "Quarterfinal – Sweden won 2–0"
+  },
+  {
+    "gameID": "M-FIN-ROC-2022",
+    "date": "2022-02-20",
+    "location": "Beijing National Indoor Stadium",
+    "teamCountry": "Finland",
+    "opponentTeam": "ROC",
+    "gameStatus": "Gold Medal Game – Finland won 2–1"
+  },
+  {
+    "gameID": "M-SVK-SWE-2022",
+    "date": "2022-02-19",
+    "location": "Beijing National Indoor Stadium",
+    "teamCountry": "Slovakia",
+    "opponentTeam": "Sweden",
+    "gameStatus": "Bronze Medal Game – Slovakia won 4–0"
+  },
+
+  "women's"
+
+  {
+    "gameID": "W-CAN-USA-2022",
+    "date": "2022-02-16",
+    "location": "Wukesong Arena",
+    "teamCountry": "Canada",
+    "opponentTeam": "United States",
+    "gameStatus": "Gold Medal Game – Canada won 3–2"
+  },
+  {
+    "gameID": "W-FIN-SUI-2022",
+    "date": "2022-02-16",
+    "location": "Wukesong Arena",
+    "teamCountry": "Finland",
+    "opponentTeam": "Switzerland",
+    "gameStatus": "Bronze Medal Game – Finland won 4–0"
+  },
+  {
+    "gameID": "W-USA-ROC-2022",
+    "date": "2022-02-07",
+    "location": "Wukesong Arena",
+    "teamCountry": "USA",
+    "opponentTeam": "ROC",
+    "gameStatus": "Group A Match – USA won 5–0"
+  },
+  {
+    "gameID": "W-CAN-FIN-2022",
+    "date": "2022-02-05",
+    "location": "Wukesong Arena",
+    "teamCountry": "Canada",
+    "opponentTeam": "Finland",
+    "gameStatus": "Group A Match – Canada won 11–1"
+  },
+  {
+    "gameID": "W-JPN-CZE-2022",
+    "date": "2022-02-10",
+    "location": "Wukesong Arena",
+    "teamCountry": "Japan",
+    "opponentTeam": "Czech Republic",
+    "gameStatus": "Group B Match – Japan won (shootout)"
+  },
+  {
+    "gameID": "W-SUI-ROC-2022",
+    "date": "2022-02-12",
+    "location": "Wukesong Arena",
+    "teamCountry": "Switzerland",
+    "opponentTeam": "ROC",
+    "gameStatus": "Quarterfinal – Switzerland won 2–1"
+  },
+  {
+    "gameID": "W-SWE-JPN-2022",
+    "date": "2022-02-07",
+    "location": "Wukesong Arena",
+    "teamCountry": "Sweden",
+    "opponentTeam": "Japan",
+    "gameStatus": "Group B Match – Japan won 3–1"
+  },
+  {
+    "gameID": "W-USA-CAN-2022",
+    "date": "2022-02-08",
+    "location": "Wukesong Arena",
+    "teamCountry": "USA",
+    "opponentTeam": "Canada",
+    "gameStatus": "Group A Match – Canada won 4–2"
+  },
+  {
+    "gameID": "W-FIN-JPN-2022",
+    "date": "2022-02-11",
+    "location": "Wukesong Arena",
+    "teamCountry": "Finland",
+    "opponentTeam": "Japan",
+    "gameStatus": "Quarterfinal – Finland won 7–1"
+  }
+]

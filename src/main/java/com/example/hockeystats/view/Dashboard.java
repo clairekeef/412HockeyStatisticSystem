@@ -2,6 +2,7 @@ package com.example.hockeystats.view;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.example.hockeystats.model.*;
@@ -32,22 +33,24 @@ public class Dashboard {
     }
     
 
-    public String viewPlayerStatistics(String playerId) {
+    public String viewPlayerStatistics(String playerName, List<PlayerStats> players) {
+    return players.stream()
+        .filter(p -> p.getName().equalsIgnoreCase(playerName))
+        .map(PlayerStats::toString)
+        .findFirst()
+        .orElse("Player not found");
+}
 
-        System.out.println("Dashboard: Viewing statistics for player " + playerId);
+public String compareTeams(String team1, String team2, List<PlayerStats> players) {
+    int goalsTeam1 = players.stream()
+        .filter(p -> p.getCountry().equalsIgnoreCase(team1))
+        .mapToInt(PlayerStats::getGoals).sum();
+    int goalsTeam2 = players.stream()
+        .filter(p -> p.getCountry().equalsIgnoreCase(team2))
+        .mapToInt(PlayerStats::getGoals).sum();
 
-        // Stub return
-        return "Goals: 4, Assists: 2, Points: 6";
-    }
-
-    public String compareTeams(String teamId1, String teamId2) {
-
-        System.out.println("Dashboard: Comparing " + teamId1 + " vs " + teamId2);
-
-        // Stub comparison
-        return teamId1 + " has scored 10 goals. " +
-               teamId2 + " has scored 8 goals.";
-    }
+    return String.format("%s: %d goals | %s: %d goals", team1, goalsTeam1, team2, goalsTeam2);
+}
 }
 
     

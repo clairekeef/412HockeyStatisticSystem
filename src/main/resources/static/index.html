@@ -4,12 +4,42 @@
 
 <h1>Dashboard</h1>
 
+<select id="player1"></select>
+<select id="player2"></select>
+<select id="metric">
+  <option value="G">Goals</option>
+  <option value="A">Assists</option>
+  <option value="PTS">Points</option>
+</select>
+<button onclick="compare()">Compare</button>
+<p id="result"></p>
+
 <button onclick="loadDashboard()">Load Dashboard</button>
 
 <p id="result"></p>
 
 <script>
-    function loadDashboard() {
+     fetch("/players").then(res => res.json()).then(players => {
+        const sel1 = document.getElementById("player1");
+        const sel2 = document.getElementById("player2");
+        players.forEach(p => {
+        sel1.innerHTML += `<option value="${p.name}">${p.name}</option>`;
+        sel2.innerHTML += `<option value="${p.name}">${p.name}</option>`;
+        });
+        window.playerData = players; // save for later
+        });
+
+    function compare() {
+    const name1 = document.getElementById("player1").value;
+    const name2 = document.getElementById("player2").value;
+    const metric = document.getElementById("metric").value;
+
+    const p1 = window.playerData.find(p => p.name === name1);
+    const p2 = window.playerData.find(p => p.name === name2);
+
+    document.getElementById("result").innerText =
+        `${p1.name}: ${p1[metric]}  vs  ${p2.name}: ${p2[metric]}`;
+}   function loadDashboard() {
         fetch("/dashboard")
             .then(res => res.json())
             .then(data => {
@@ -19,7 +49,12 @@
                     "\nLeader: " + data.CurrentLeader;
             });
     }
+    
+
+
     </script>
+
+    
 
 </body>
 </html>

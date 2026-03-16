@@ -1,3 +1,27 @@
+<<<<<<< HEAD
+com/example/hockeystats/model/Game.class
+com/example/hockeystats/model/DataRepository.class
+com/example/hockeystats/model/PerformanceDataEvaluation.class
+com/example/hockeystats/model/PlayerStats.class
+com/example/hockeystats/model/Team.class
+com/example/hockeystats/model/Stats.class
+com/example/hockeystats/model/MetricCalculator.class
+com/example/hockeystats/model/Profile.class
+com/example/hockeystats/model/TeamStats.class
+com/example/hockeystats/model/UserManagement.class
+com/example/hockeystats/HockeyStatisticsApplication.class
+com/example/hockeystats/controller/AuthenticationModule$1.class
+com/example/hockeystats/controller/AuthenticationModule.class
+com/example/hockeystats/model/User.class
+com/example/hockeystats/view/Dashboard.class
+com/example/hockeystats/model/UserRole.class
+com/example/hockeystats/tester/Tester.class
+com/example/hockeystats/controller/DashboardController.class
+com/example/hockeystats/model/Statistics.class
+com/example/hockeystats/model/GameSummary.class
+com/example/hockeystats/controller/GameController.class
+com/example/hockeystats/model/Preferences.class
+=======
 com\example\hockeystats\model\PlayerStats.class
 com\example\hockeystats\tester\Tester.class
 com\example\hockeystats\model\UserRole.class
@@ -20,3 +44,4 @@ com\example\hockeystats\model\User.class
 com\example\hockeystats\controller\GameController.class
 com\example\hockeystats\model\PerformanceDataEvaluation.class
 com\example\hockeystats\model\Stats.class
+>>>>>>> c90cb6ad49daec76fd1af0cd4a3406dc05136d01

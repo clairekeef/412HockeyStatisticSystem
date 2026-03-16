@@ -9,14 +9,17 @@
 <p id="result"></p>
 
 <script>
-function loadDashboard() {
-    fetch("/dashboard")
-        .then(res => res.text())
-        .then(data => {
-            document.getElementById("result").innerText = data;
-        });
-}
-</script>
+    function loadDashboard() {
+        fetch("/dashboard")
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("result").innerText =
+                    "Top Team: " + data.TopTeam +
+                    "\nTotal Games: " + data.TotalGamesPlayed +
+                    "\nLeader: " + data.CurrentLeader;
+            });
+    }
+    </script>
 
 </body>
 </html>

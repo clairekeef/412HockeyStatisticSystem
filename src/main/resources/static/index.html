@@ -1,60 +1,107 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; }
+    h1 { color: #1a3a5c; }
+    label { display: block; margin-top: 14px; font-size: 0.85rem; color: #555; }
+    select, button { margin-top: 4px; padding: 6px 10px; font-size: 0.95rem; }
+    button { background: #1a3a5c; color: white; border: none; border-radius: 4px; cursor: pointer; padding: 8px 16px; }
+    button:hover { background: #2a5a8c; }
+    #result { margin-top: 20px; background: #f0f4f8; padding: 12px; border-radius: 6px; white-space: pre-line; }
+  </style>
+</head>
 <body>
 
-<h1>Dashboard</h1>
+<h1>Hockey Statistics Dashboard</h1>
 
+<label>Player 1 Country</label>
+<select id="filter-country1" onchange="filterPlayers(1)">
+  <option value="">All Countries</option>
+  <option value="Canada">Canada</option>
+  <option value="USA">USA</option>
+  <option value="Germany">Germany</option>
+  <option value="China">China</option>
+</select>
+
+<label>Player 1</label>
 <select id="player1"></select>
+
+<label>Player 2 Country</label>
+<select id="filter-country2" onchange="filterPlayers(2)">
+  <option value="">All Countries</option>
+  <option value="Canada">Canada</option>
+  <option value="USA">USA</option>
+  <option value="Germany">Germany</option>
+  <option value="China">China</option>
+</select>
+
+<label>Player 2</label>
 <select id="player2"></select>
+
+<label>Metric</label>
 <select id="metric">
   <option value="G">Goals</option>
   <option value="A">Assists</option>
   <option value="PTS">Points</option>
+  <option value="GP">Games Played</option>
+  <option value="PIM">Penalty Minutes</option>
+  <option value="PPG">Power Play Goals</option>
 </select>
-<button onclick="compare()">Compare</button>
-<p id="result"></p>
 
-<button onclick="loadDashboard()">Load Dashboard</button>
+<br/><br/>
+<button onclick="compare()">Compare Players</button>
+<button onclick="loadDashboard()" style="margin-left:10px; background:#444;">Load Dashboard</button>
 
 <p id="result"></p>
 
 <script>
-     fetch("/players").then(res => res.json()).then(players => {
-        const sel1 = document.getElementById("player1");
-        const sel2 = document.getElementById("player2");
-        players.forEach(p => {
-        sel1.innerHTML += `<option value="${p.name}">${p.name}</option>`;
-        sel2.innerHTML += `<option value="${p.name}">${p.name}</option>`;
-        });
-        window.playerData = players; // save for later
-        });
+  fetch("/players").then(res => res.json()).then(players => {
+    window.playerData = players;
+    populateDropdowns(players);
+  });
 
-    function compare() {
+  function populateDropdowns(players) {
+    [1, 2].forEach(slot => {
+      const sel = document.getElementById("player" + slot);
+      sel.innerHTML = "";
+      players.forEach(p => {
+        sel.innerHTML += `<option value="${p.name}">${p.name}</option>`;
+      });
+    });
+  }
+
+  function filterPlayers(slot) {
+    const country = document.getElementById("filter-country" + slot).value;
+    const filtered = country
+      ? window.playerData.filter(p => p.country === country)
+      : window.playerData;
+    const sel = document.getElementById("player" + slot);
+    sel.innerHTML = "";
+    filtered.forEach(p => {
+      sel.innerHTML += `<option value="${p.name}">${p.name}</option>`;
+    });
+  }
+
+  function compare() {
     const name1 = document.getElementById("player1").value;
     const name2 = document.getElementById("player2").value;
     const metric = document.getElementById("metric").value;
-
     const p1 = window.playerData.find(p => p.name === name1);
     const p2 = window.playerData.find(p => p.name === name2);
-
+    const winner = p1[metric] > p2[metric] ? p1.name : p2[metric] > p1[metric] ? p2.name : "Tie";
     document.getElementById("result").innerText =
-        `${p1.name}: ${p1[metric]}  vs  ${p2.name}: ${p2[metric]}`;
-}   function loadDashboard() {
-        fetch("/dashboard")
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById("result").innerText =
-                    "Top Team: " + data.TopTeam +
-                    "\nTotal Games: " + data.TotalGamesPlayed +
-                    "\nLeader: " + data.CurrentLeader;
-            });
-    }
-    
+      `${p1.name}: ${p1[metric]}\n${p2.name}: ${p2[metric]}\n\nWinner: ${winner}`;
+  }
 
-
-    </script>
-
-    
-
+  function loadDashboard() {
+    fetch("/dashboard").then(res => res.json()).then(data => {
+      document.getElementById("result").innerText =
+        "Top Team: " + data.TopTeam +
+        "\nTotal Games: " + data.TotalGamesPlayed +
+        "\nLeader: " + data.CurrentLeader;
+    });
+  }
+</script>
 </body>
 </html>

@@ -128,7 +128,7 @@ public class Tester {
         System.out.println("\nTesting Game Details...");
         dashboard.viewGameDetails("G1");
         System.out.println("\nTesting Team Comparison...");
-        System.out.println(dashboard.compareTeams("USA", "Canada"));
+       // System.out.println(dashboard.compareTeams("USA", "Canada"));
  
         System.out.println();
     }

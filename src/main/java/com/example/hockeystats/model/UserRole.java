@@ -1,4 +1,4 @@
-package src.main.java.com.example.hockeystats.model;
+package com.example.hockeystats.model;
 
 public enum UserRole {
     ADMIN,

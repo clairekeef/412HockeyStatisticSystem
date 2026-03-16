@@ -1,4 +1,4 @@
-package src.main.java.com.example.hockeystats.model;
+package com.example.hockeystats.model;
 
 /**
  * Represents a single generic statistic: a named entity paired with a numeric value.

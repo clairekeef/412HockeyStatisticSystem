@@ -1,6 +1,6 @@
-package src.main.java.com.example.hockeystats.controller;
+package com.example.hockeystats.controller;
 
-import src.main.java.com.example.hockeystats.model.*;
+import com.example.hockeystats.model.*;
 
 public class AuthenticationModule {
 

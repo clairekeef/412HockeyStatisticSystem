@@ -1,8 +1,8 @@
-package src.main.java.com.example.hockeystats.tester;
+package com.example.hockeystats.tester;
  
-import src.main.java.com.example.hockeystats.controller.*;
-import src.main.java.com.example.hockeystats.model.*;
-import src.main.java.com.example.hockeystats.view.Dashboard;
+import com.example.hockeystats.controller.*;
+import com.example.hockeystats.model.*;
+import com.example.hockeystats.view.Dashboard;
 
 import java.util.List;
 import java.util.ArrayList;

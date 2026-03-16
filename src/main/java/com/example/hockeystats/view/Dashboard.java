@@ -1,10 +1,10 @@
-package src.main.java.com.example.hockeystats.view;
+package com.example.hockeystats.view;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import src.main.java.com.example.hockeystats.model.*;
+import com.example.hockeystats.model.*;
 
 public class Dashboard {
 

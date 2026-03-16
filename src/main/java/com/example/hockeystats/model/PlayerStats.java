@@ -1,4 +1,4 @@
-package src.main.java.com.example.hockeystats.model;
+package com.example.hockeystats.model;
 public class PlayerStats {
 
     private final String name;       // player name (also used as ID)

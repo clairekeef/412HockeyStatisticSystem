@@ -1,11 +1,11 @@
-package src.main.java.com.example.hockeystats.controller;
+package com.example.hockeystats.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import src.main.java.com.example.hockeystats.model.Game;
-import src.main.java.com.example.hockeystats.model.GameSummary;
+import com.example.hockeystats.model.Game;
+import com.example.hockeystats.model.GameSummary;
 
 public class GameController {
     private List<Game> games;

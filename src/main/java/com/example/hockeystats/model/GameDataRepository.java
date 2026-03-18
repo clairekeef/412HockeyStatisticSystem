@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * GameRepository loads and stores game data from a Game CSV file.
+ * GameRepository loads and stores game data from Game CSV file.
  *
  * CSV format:
  *   gameID,teamCountry,opponentTeam,location,date

@@ -55,12 +55,16 @@ public class GameDataRepository {
                 if (line.isEmpty()) continue;
 
                 // Skip header row
-                if (firstLine) {
-                    firstLine = false;
-                    if (line.toLowerCase().startsWith("gameid")) continue;
-                }
+               if (firstLine) {
+                firstLine = false;
+                String clean = line.replace("\uFEFF", "").trim().toLowerCase();
+                if (clean.startsWith("gameid")) continue;
+            }
+
 
                 parseAndStore(line);
+                System.out.println("Parsing: " + line);
+
             }
 
             reader.close();

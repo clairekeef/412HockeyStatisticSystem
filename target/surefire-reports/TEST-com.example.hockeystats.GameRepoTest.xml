@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.example.hockeystats.DataRepositoryTest" time="0.037" tests="28" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.example.hockeystats.GameRepoTest" time="0.041" tests="3" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="25"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -60,35 +60,73 @@
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.class.version" value="69.0"/>
   </properties>
-  <testcase name="getTopScorers_sortedByPoints" classname="com.example.hockeystats.DataRepositoryTest" time="0.006"/>
-  <testcase name="getTopScorers_returnsCorrectCount" classname="com.example.hockeystats.DataRepositoryTest" time="0.001"/>
-  <testcase name="getGoalsByCountry_noNegativeValues" classname="com.example.hockeystats.DataRepositoryTest" time="0.002"/>
-  <testcase name="getPlayerByName_nullReturnsNull" classname="com.example.hockeystats.DataRepositoryTest" time="0.001"/>
-  <testcase name="getMetricForPlayer_goals" classname="com.example.hockeystats.DataRepositoryTest" time="0.0"/>
-  <testcase name="getPlayerByName_exactMatch" classname="com.example.hockeystats.DataRepositoryTest" time="0.0"/>
-  <testcase name="getMetricForCountry_unknownCountryReturnsZero" classname="com.example.hockeystats.DataRepositoryTest" time="0.002"/>
-  <testcase name="getPlayersByPosition_forwardNotEmpty" classname="com.example.hockeystats.DataRepositoryTest" time="0.001"/>
-  <testcase name="getPointsByCountry_canadaMoreThanChina" classname="com.example.hockeystats.DataRepositoryTest" time="0.001"/>
-  <testcase name="getAvailableCountries_isSorted" classname="com.example.hockeystats.DataRepositoryTest" time="0.001"/>
-  <testcase name="getGoalsByCountry_containsExpectedCountries" classname="com.example.hockeystats.DataRepositoryTest" time="0.002"/>
-  <testcase name="getPlayersByCountry_caseInsensitive" classname="com.example.hockeystats.DataRepositoryTest" time="0.001"/>
-  <testcase name="getPlayerByName_caseInsensitive" classname="com.example.hockeystats.DataRepositoryTest" time="0.0"/>
-  <testcase name="getAllPlayers_returns86Players" classname="com.example.hockeystats.DataRepositoryTest" time="0.001"/>
-  <testcase name="getMetricForPlayer_unknownMetricReturnsZero" classname="com.example.hockeystats.DataRepositoryTest" time="0.001">
-    <system-err><![CDATA[DataRepository: unknown metric 'XYZ'
-]]></system-err>
+  <testcase name="testGetGameByID" classname="com.example.hockeystats.GameRepoTest" time="0.025">
+    <system-out><![CDATA[Parsing: M-USA-CAN-2022,USA,Canada,Beijing National Indoor Stadium,2022-02-12
+Parsing: M-ROC-CZE-2022,ROC,Czech Republic,Beijing National Indoor Stadium,2022-02-09
+Parsing: M-SWE-LAT-2022,Sweden,Latvia,Wukesong Arena,2022-02-10
+Parsing: M-FIN-SVK-2022,Finland,Slovakia,Beijing National Indoor Stadium,2022-02-10
+Parsing: M-CAN-GER-2022,Canada,Germany,Wukesong Arena,2022-02-10
+Parsing: M-USA-GER-2022,USA,Germany,Beijing National Indoor Stadium,2022-02-13
+Parsing: M-SUI-DEN-2022,Switzerland,Denmark,Wukesong Arena,2022-02-11
+Parsing: M-SVK-GER-2022,Slovakia,Germany,Beijing National Indoor Stadium,2022-02-16
+Parsing: M-SWE-CAN-2022,Sweden,Canada,Wukesong Arena,2022-02-16
+Parsing: M-FIN-ROC-2022,Finland,ROC,Beijing National Indoor Stadium,2022-02-20
+Parsing: M-SVK-SWE-2022,Slovakia,Sweden,Beijing National Indoor Stadium,2022-02-19
+Parsing: W-CAN-USA-2022,Canada,USA,Wukesong Arena,2022-02-16
+Parsing: W-FIN-SUI-2022,Finland,Switzerland,Wukesong Arena,2022-02-16
+Parsing: W-USA-ROC-2022,USA,ROC,Wukesong Arena,2022-02-07
+Parsing: W-CAN-FIN-2022,Canada,Finland,Wukesong Arena,2022-02-05
+Parsing: W-JPN-CZE-2022,Japan,Czech Republic,Wukesong Arena,2022-02-10
+Parsing: W-SUI-ROC-2022,Switzerland,ROC,Wukesong Arena,2022-02-12
+Parsing: W-SWE-JPN-2022,Sweden,Japan,Wukesong Arena,2022-02-07
+Parsing: W-USA-CAN-2022,USA,Canada,Wukesong Arena,2022-02-08
+Parsing: W-FIN-JPN-2022,Finland,Japan,Wukesong Arena,2022-02-11
+]]></system-out>
   </testcase>
-  <testcase name="getPlayersByCountry_nullReturnsEmpty" classname="com.example.hockeystats.DataRepositoryTest" time="0.001"/>
-  <testcase name="getTopScorers_zeroReturnsEmpty" classname="com.example.hockeystats.DataRepositoryTest" time="0.0"/>
-  <testcase name="getMetricForPlayer_points" classname="com.example.hockeystats.DataRepositoryTest" time="0.001"/>
-  <testcase name="getPlayerByName_unknownReturnsNull" classname="com.example.hockeystats.DataRepositoryTest" time="0.001"/>
-  <testcase name="getPlayersByPosition_nullReturnsEmpty" classname="com.example.hockeystats.DataRepositoryTest" time="0.0"/>
-  <testcase name="getMetricForCountry_canadaGoalsPositive" classname="com.example.hockeystats.DataRepositoryTest" time="0.0"/>
-  <testcase name="getPlayersByCountry_unknownReturnsEmpty" classname="com.example.hockeystats.DataRepositoryTest" time="0.001"/>
-  <testcase name="getAvailableCountries_returnsFour" classname="com.example.hockeystats.DataRepositoryTest" time="0.0"/>
-  <testcase name="getPlayersByPosition_defenceNotEmpty" classname="com.example.hockeystats.DataRepositoryTest" time="0.0"/>
-  <testcase name="getMetricForPlayer_unknownPlayerReturnsZero" classname="com.example.hockeystats.DataRepositoryTest" time="0.001"/>
-  <testcase name="getPlayersByCountry_canadaNotEmpty" classname="com.example.hockeystats.DataRepositoryTest" time="0.0"/>
-  <testcase name="getTopScorersByCountry_allFromCorrectCountry" classname="com.example.hockeystats.DataRepositoryTest" time="0.001"/>
-  <testcase name="getTopScorersByCountry_correctCount" classname="com.example.hockeystats.DataRepositoryTest" time="0.001"/>
+  <testcase name="testLoadAmt" classname="com.example.hockeystats.GameRepoTest" time="0.002">
+    <system-out><![CDATA[Parsing: M-USA-CAN-2022,USA,Canada,Beijing National Indoor Stadium,2022-02-12
+Parsing: M-ROC-CZE-2022,ROC,Czech Republic,Beijing National Indoor Stadium,2022-02-09
+Parsing: M-SWE-LAT-2022,Sweden,Latvia,Wukesong Arena,2022-02-10
+Parsing: M-FIN-SVK-2022,Finland,Slovakia,Beijing National Indoor Stadium,2022-02-10
+Parsing: M-CAN-GER-2022,Canada,Germany,Wukesong Arena,2022-02-10
+Parsing: M-USA-GER-2022,USA,Germany,Beijing National Indoor Stadium,2022-02-13
+Parsing: M-SUI-DEN-2022,Switzerland,Denmark,Wukesong Arena,2022-02-11
+Parsing: M-SVK-GER-2022,Slovakia,Germany,Beijing National Indoor Stadium,2022-02-16
+Parsing: M-SWE-CAN-2022,Sweden,Canada,Wukesong Arena,2022-02-16
+Parsing: M-FIN-ROC-2022,Finland,ROC,Beijing National Indoor Stadium,2022-02-20
+Parsing: M-SVK-SWE-2022,Slovakia,Sweden,Beijing National Indoor Stadium,2022-02-19
+Parsing: W-CAN-USA-2022,Canada,USA,Wukesong Arena,2022-02-16
+Parsing: W-FIN-SUI-2022,Finland,Switzerland,Wukesong Arena,2022-02-16
+Parsing: W-USA-ROC-2022,USA,ROC,Wukesong Arena,2022-02-07
+Parsing: W-CAN-FIN-2022,Canada,Finland,Wukesong Arena,2022-02-05
+Parsing: W-JPN-CZE-2022,Japan,Czech Republic,Wukesong Arena,2022-02-10
+Parsing: W-SUI-ROC-2022,Switzerland,ROC,Wukesong Arena,2022-02-12
+Parsing: W-SWE-JPN-2022,Sweden,Japan,Wukesong Arena,2022-02-07
+Parsing: W-USA-CAN-2022,USA,Canada,Wukesong Arena,2022-02-08
+Parsing: W-FIN-JPN-2022,Finland,Japan,Wukesong Arena,2022-02-11
+]]></system-out>
+  </testcase>
+  <testcase name="testGetGamesByTeam" classname="com.example.hockeystats.GameRepoTest" time="0.003">
+    <system-out><![CDATA[Parsing: M-USA-CAN-2022,USA,Canada,Beijing National Indoor Stadium,2022-02-12
+Parsing: M-ROC-CZE-2022,ROC,Czech Republic,Beijing National Indoor Stadium,2022-02-09
+Parsing: M-SWE-LAT-2022,Sweden,Latvia,Wukesong Arena,2022-02-10
+Parsing: M-FIN-SVK-2022,Finland,Slovakia,Beijing National Indoor Stadium,2022-02-10
+Parsing: M-CAN-GER-2022,Canada,Germany,Wukesong Arena,2022-02-10
+Parsing: M-USA-GER-2022,USA,Germany,Beijing National Indoor Stadium,2022-02-13
+Parsing: M-SUI-DEN-2022,Switzerland,Denmark,Wukesong Arena,2022-02-11
+Parsing: M-SVK-GER-2022,Slovakia,Germany,Beijing National Indoor Stadium,2022-02-16
+Parsing: M-SWE-CAN-2022,Sweden,Canada,Wukesong Arena,2022-02-16
+Parsing: M-FIN-ROC-2022,Finland,ROC,Beijing National Indoor Stadium,2022-02-20
+Parsing: M-SVK-SWE-2022,Slovakia,Sweden,Beijing National Indoor Stadium,2022-02-19
+Parsing: W-CAN-USA-2022,Canada,USA,Wukesong Arena,2022-02-16
+Parsing: W-FIN-SUI-2022,Finland,Switzerland,Wukesong Arena,2022-02-16
+Parsing: W-USA-ROC-2022,USA,ROC,Wukesong Arena,2022-02-07
+Parsing: W-CAN-FIN-2022,Canada,Finland,Wukesong Arena,2022-02-05
+Parsing: W-JPN-CZE-2022,Japan,Czech Republic,Wukesong Arena,2022-02-10
+Parsing: W-SUI-ROC-2022,Switzerland,ROC,Wukesong Arena,2022-02-12
+Parsing: W-SWE-JPN-2022,Sweden,Japan,Wukesong Arena,2022-02-07
+Parsing: W-USA-CAN-2022,USA,Canada,Wukesong Arena,2022-02-08
+Parsing: W-FIN-JPN-2022,Finland,Japan,Wukesong Arena,2022-02-11
+]]></system-out>
+  </testcase>
 </testsuite>

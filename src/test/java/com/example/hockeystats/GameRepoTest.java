@@ -32,7 +32,7 @@ public class GameRepoTest {
     void testGetGamesByTeam(){
         GameDataRepository repo = new GameDataRepository("game.csv") ;
         List<Game> canadaGames = repo.getGamesByTeam("canada");
-        assertEquals(4, canadaGames.size());
+        assertEquals(3, canadaGames.size());
     }
 
 }

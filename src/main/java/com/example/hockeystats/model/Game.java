@@ -8,6 +8,7 @@ public class Game {
     private String location;
     private String teamCountry;
     private String opponentTeam;
+    private String status;
 
     public Game(String gameID, String teamCountry, String opponentTeam, String location, Date date){
         this.gameID = gameID;
@@ -47,6 +48,14 @@ public class Game {
     public String toString(){
         return "*Game* \n" + "Game ID: " + gameID + "\nCountry: " + teamCountry 
         +  "\nOpponent: " + opponentTeam + "\nLocation: " + location + "\nDate: " + date.toString();
+    }
+    
+    public void updateGameStatus(String status) {
+    this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
 }

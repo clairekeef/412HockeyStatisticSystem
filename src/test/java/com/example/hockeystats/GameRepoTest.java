@@ -14,14 +14,13 @@ public class GameRepoTest {
     
     @Test
     void testLoadAmt(){
-       GameDataRepository repo = new GameDataRepository("games.csv") ;
-       assertEquals(20, repo.getAllGames()
-    );
+       GameDataRepository repo = new GameDataRepository("game.csv") ;
+       assertEquals(20, repo.getAllGames().size());
     }
 
     @Test
     void testGetGameByID(){
-        GameDataRepository repo = new GameDataRepository("games.csv") ;
+        GameDataRepository repo = new GameDataRepository("game.csv") ;
         Game game = repo.getGameByID("W-CAN-USA-2022");
 
         assertNotNull(game);
@@ -31,7 +30,7 @@ public class GameRepoTest {
 
     @Test
     void testGetGamesByTeam(){
-        GameDataRepository repo = new GameDataRepository("games.csv") ;
+        GameDataRepository repo = new GameDataRepository("game.csv") ;
         List<Game> canadaGames = repo.getGamesByTeam("canada");
         assertEquals(4, canadaGames.size());
     }

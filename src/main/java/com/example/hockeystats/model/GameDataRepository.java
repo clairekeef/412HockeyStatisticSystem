@@ -27,12 +27,12 @@ public class GameDataRepository {
 
     public GameDataRepository() {
         loadCSV("game.csv");
-        System.out.println("GameDataRepository initialized — " + allGames.size() + " games loaded.");
+        
     }
 
     public GameDataRepository(String csvPath) {
         loadCSV(csvPath);
-        System.out.println("GameDataRepository initialized — " + allGames.size() + " games loaded.");
+    
     }
 
     private void loadCSV(String path) {
@@ -79,7 +79,7 @@ public class GameDataRepository {
      */
     private void parseAndStore(String line) {
         String[] cols = line.split(",", -1);
-        if (cols.length < 5) {
+        if (cols.length <5) {
             System.err.println("GameRepository: skipping malformed row: " + line);
             return;
         }

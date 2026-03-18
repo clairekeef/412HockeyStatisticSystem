@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<h1>Hockey Statistics Dashboard</h1>
+<h1>2022 Olympic Hockey Statistics Dashboard</h1>
 
 <label>Player 1 Country</label>
 <select id="filter-country1" onchange="filterPlayers(1)">
@@ -54,6 +54,31 @@
 <button onclick="loadDashboard()" style="margin-left:10px; background:#444;">Load Dashboard</button>
 
 <p id="result"></p>
+
+<!-- <hr style="margin-top:30px; border-color:#ccd6e0;"/>
+
+<h2 style="color:#1a3a5c; margin-top:20px;">Team Comparison (total goals, 2022)</h2>
+
+<label>Team 1</label>
+<select id="team1"></select>
+
+<label>Team 2</label>
+<select id="team2"></select>
+
+<label>Metric</label>
+<select id="team-metric">
+  <option value="G">Goals</option>
+  <option value="A">Assists</option>
+  <option value="PTS">Points</option>
+  <option value="GP">Games Played</option>
+  <option value="PIM">Penalty Minutes</option>
+  <option value="PPG">Power Play Goals</option>
+</select>
+
+<br/><br/>
+<button onclick="compareTeams()">Compare Teams</button>
+
+<p id="team-result"></p> -->
 
 <script>
   fetch("/players").then(res => res.json()).then(players => {
@@ -107,6 +132,29 @@
         "\nLeader: " + data.CurrentLeader;
     });
   }
+
+  // // Team comparison
+  // fetch("/teams").then(res => res.json()).then(teams => {
+  //   window.teamData = teams;
+  //   [1, 2].forEach(slot => {
+  //     const sel = document.getElementById("team" + slot);
+  //     sel.innerHTML = "";
+  //     teams.forEach(t => {
+  //       sel.innerHTML += `<option value="${t.name}">${t.name}</option>`;
+  //     });
+  //   });
+  // });
+
+  // function compareTeams() {
+  //   const name1  = document.getElementById("team1").value;
+  //   const name2  = document.getElementById("team2").value;
+  //   const metric = document.getElementById("team-metric").value;
+  //   const t1 = window.teamData.find(t => t.name === name1);
+  //   const t2 = window.teamData.find(t => t.name === name2);
+  //   const winner = t1[metric] > t2[metric] ? t1.name : t2[metric] > t1[metric] ? t2.name : "Tie";
+  //   document.getElementById("team-result").innerText =
+  //     `${t1.name}: ${t1[metric]}\n${t2.name}: ${t2[metric]}\n`;
+  // }
 </script>
 </body>
 </html>

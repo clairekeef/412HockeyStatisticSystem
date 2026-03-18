@@ -15,32 +15,43 @@
 
 <h1>2022 Olympic Hockey Statistics Dashboard</h1>
 
-<label>Player 1 Country</label>
-<select id="filter-country1" onchange="filterPlayers(1)">
-  <option value="">All Countries</option>
-  <option value="Canada">Canada</option>
-  <option value="USA">USA</option>
-  <option value="Germany">Germany</option>
-  <option value="China">China</option>
-</select>
+<div style="display:flex; gap:60px;">
 
-<label>Player 1</label>
-<select id="player1"></select>
+  <div style="display:flex; flex-direction:column;">
+    <label>Player 1 Country</label>
+    <select id="filter-country1" onchange="filterPlayers(1)">
+      <option value="select">Select Country</option>
+      <option value="">All Countries</option>
+      <option value="Canada">Canada</option>
+      <option value="USA">USA</option>
+      <option value="Germany">Germany</option>
+      <option value="China">China</option>
+    </select>
 
-<label>Player 2 Country</label>
-<select id="filter-country2" onchange="filterPlayers(2)">
-  <option value="">All Countries</option>
-  <option value="Canada">Canada</option>
-  <option value="USA">USA</option>
-  <option value="Germany">Germany</option>
-  <option value="China">China</option>
-</select>
+    <label>Player 1</label>
+    <select id="player1"></select>
+  </div>
 
-<label>Player 2</label>
-<select id="player2"></select>
+  <div style="display:flex; flex-direction:column;">
+    <label>Player 2 Country</label>
+    <select id="filter-country2" onchange="filterPlayers(2)">
+      <option value="select">Select Country</option>
+      <option value="">All Countries</option>
+      <option value="Canada">Canada</option>
+      <option value="USA">USA</option>
+      <option value="Germany">Germany</option>
+      <option value="China">China</option>
+    </select>
+
+    <label>Player 2</label>
+    <select id="player2"></select>
+  </div>
+
+</div>
 
 <label>Metric</label>
 <select id="metric">
+  <option value="select">Select Metric</option>
   <option value="G">Goals</option>
   <option value="A">Assists</option>
   <option value="PTS">Points</option>
@@ -94,7 +105,8 @@
   function populateDropdowns(players) {
     [1, 2].forEach(slot => {
       const sel = document.getElementById("player" + slot);
-      sel.innerHTML = "";
+      sel.innerHTML = "<option value=''>Select Player</option>";
+      //sel.innerHTML = "";
       players.forEach(p => {
         sel.innerHTML += `<option value="${p.name}">${p.name}</option>`;
       });
@@ -107,7 +119,8 @@
       ? window.playerData.filter(p => p.Country === country)
       : window.playerData;
     const sel = document.getElementById("player" + slot);
-    sel.innerHTML = "";
+    sel.innerHTML = "<option value=''>Select Player</option>";
+    //sel.innerHTML = "";
     filtered.forEach(p => {
       sel.innerHTML += `<option value="${p.name}">${p.name}</option>`;
     });

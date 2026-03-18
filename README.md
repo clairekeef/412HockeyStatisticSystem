@@ -22,4 +22,5 @@ mfr5829 - Marcela Ramirez Vadillo
     Implemented: Game and Game Summary classes. Tested these classes in the Tester and updated the UML diagram with all attributes and methods implemented. Also added activity and sequence diagram for View Game Information and Create Game Summary.
 
 
-To run: mvn spring-boot:run
+To run on mac in terminal: mvn spring-boot:run
+To run on Windwos in terminal: ./mvnw.cmd spring-boot:run

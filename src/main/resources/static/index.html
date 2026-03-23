@@ -1,173 +1,311 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; }
-    h1 { color: #1a3a5c; }
-    label { display: block; margin-top: 14px; font-size: 0.85rem; color: #555; }
-    select, button { margin-top: 4px; padding: 6px 10px; font-size: 0.95rem; }
-    button { background: #1a3a5c; color: white; border: none; border-radius: 4px; cursor: pointer; padding: 8px 16px; }
-    button:hover { background: #2a5a8c; }
-    #result { margin-top: 20px; background: #f0f4f8; padding: 12px; border-radius: 6px; white-space: pre-line; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      background: #0d1b2a;
+      color: #fff;
+      padding: 48px 24px;
+    }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .header .eyebrow {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #00a8e8;
+      margin-bottom: 8px;
+    }
+    .header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      letter-spacing: 3px;
+      line-height: 1;
+      color: #fff;
+
+    }
+    .header .divider {
+      width: 60px;
+      height: 3px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 2px;
+      margin: 16px auto 0;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 36px 40px;
+      max-width: 680px;
+      margin: 0 auto;
+      box-shadow: 0 16px 64px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    /* ── Grid ── */
+    .player-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* ── Labels ── */
+    label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* ── Selects ── */
+    select {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      color: #fff;
+      padding: 11px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.4)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+    select:hover {
+      border-color: rgba(0, 168, 232, 0.5);
+      background-color: rgba(0, 168, 232, 0.08);
+    }
+    select:focus {
+      outline: none;
+      border-color: #00a8e8;
+      box-shadow: 0 0 0 3px rgba(0, 168, 232, 0.15);
+    }
+    select option {
+      background: #0d2244;
+      color: #fff;
+    }
+
+    /* ── Divider ── */
+    .section-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+      margin: 24px 0;
+    }
+
+    /* ── Metric row ── */
+    .metric-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 28px;
+    }
+    .metric-row select {
+      max-width: 280px;
+    }
+
+    /* ── Buttons ── */
+    .btn-row {
+      display: flex;
+      gap: 12px;
+    }
+    .btn-primary {
+      background: #00a8e8;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 13px 28px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.05rem;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+
+    }
+    .btn-primary:hover {
+      background: #00bfff;
+      transform: translateY(-2px);
+
+    }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-secondary {
+      background: transparent;
+      color: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 10px;
+      padding: 13px 28px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.05rem;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-secondary:hover {
+      border-color: #00a8e8;
+      color: #00a8e8;
+    }
+
+    /* ── Result box ── */
+    #result {
+      margin-top: 24px;
+      background: rgba(0, 168, 232, 0.08);
+      border: 1px solid rgba(0, 168, 232, 0.2);
+      border-radius: 12px;
+      padding: 18px 20px;
+      white-space: pre-line;
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.7;
+      display: none;
+    }
+    #result:not(:empty) { display: block; }
   </style>
 </head>
-<body style = "background-color:#142226;">
+<body>
 
-<h1>2022 Olympic Hockey Statistics Dashboard</h1>
-
-<div style="display:flex; gap:60px;">
-
-  <div style="display:flex; flex-direction:column;">
-    <label>Player 1 Country</label>
-    <select id="filter-country1" onchange="filterPlayers(1)">
-      <option value="select">Select Country</option>
-      <option value="">All Countries</option>
-      <option value="Canada">Canada</option>
-      <option value="USA">USA</option>
-      <option value="Germany">Germany</option>
-      <option value="China">China</option>
-    </select>
-
-    <label>Player 1</label>
-    <select id="player1"></select>
+  <div class="header">
+    <p class="eyebrow">Beijing 2022</p>
+    <h1>Olympic Hockey<br>Statistics Dashboard</h1>
+    <div class="divider"></div>
   </div>
 
-  <div style="display:flex; flex-direction:column;">
-    <label>Player 2 Country</label>
-    <select id="filter-country2" onchange="filterPlayers(2)">
-      <option value="select">Select Country</option>
-      <option value="">All Countries</option>
-      <option value="Canada">Canada</option>
-      <option value="USA">USA</option>
-      <option value="Germany">Germany</option>
-      <option value="China">China</option>
-    </select>
+  <div class="card">
 
-    <label>Player 2</label>
-    <select id="player2"></select>
+    <div class="player-grid">
+      <div>
+        <div class="field-group">
+          <label>Player 1 Country</label>
+          <select id="filter-country1" onchange="filterPlayers(1)">
+            <option value="select">Select Country</option>
+            <option value="">All Countries</option>
+            <option value="Canada">Canada</option>
+            <option value="USA">USA</option>
+            <option value="Germany">Germany</option>
+            <option value="China">China</option>
+          </select>
+        </div>
+        <div class="field-group" style="margin-top:16px;">
+          <label>Player 1</label>
+          <select id="player1"></select>
+        </div>
+      </div>
+
+      <div>
+        <div class="field-group">
+          <label>Player 2 Country</label>
+          <select id="filter-country2" onchange="filterPlayers(2)">
+            <option value="select">Select Country</option>
+            <option value="">All Countries</option>
+            <option value="Canada">Canada</option>
+            <option value="USA">USA</option>
+            <option value="Germany">Germany</option>
+            <option value="China">China</option>
+          </select>
+        </div>
+        <div class="field-group" style="margin-top:16px;">
+          <label>Player 2</label>
+          <select id="player2"></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="metric-row">
+      <label>Metric</label>
+      <select id="metric">
+        <option value="select">Select Metric</option>
+        <option value="G">Goals</option>
+        <option value="A">Assists</option>
+        <option value="PTS">Points</option>
+        <option value="GP">Games Played</option>
+        <option value="PIM">Penalty Minutes</option>
+        <option value="PPG">Power Play Goals</option>
+      </select>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-primary" onclick="compare()">Compare Players</button>
+      <button class="btn-secondary" onclick="loadDashboard()">Load Dashboard</button>
+    </div>
+
+    <p id="result"></p>
+
   </div>
 
-</div>
-
-<label>Metric</label>
-<select id="metric">
-  <option value="select">Select Metric</option>
-  <option value="G">Goals</option>
-  <option value="A">Assists</option>
-  <option value="PTS">Points</option>
-  <option value="GP">Games Played</option>
-  <option value="PIM">Penalty Minutes</option>
-  <option value="PPG">Power Play Goals</option>
-</select>
-
-<br/><br/>
-<button onclick="compare()">Compare Players</button>
-<button onclick="loadDashboard()" style="margin-left:10px; background:#444;">Load Dashboard</button>
-
-<p id="result"></p>
-
-<!-- <hr style="margin-top:30px; border-color:#ccd6e0;"/>
-
-<h2 style="color:#1a3a5c; margin-top:20px;">Team Comparison (total goals, 2022)</h2>
-
-<label>Team 1</label>
-<select id="team1"></select>
-
-<label>Team 2</label>
-<select id="team2"></select>
-
-<label>Metric</label>
-<select id="team-metric">
-  <option value="G">Goals</option>
-  <option value="A">Assists</option>
-  <option value="PTS">Points</option>
-  <option value="GP">Games Played</option>
-  <option value="PIM">Penalty Minutes</option>
-  <option value="PPG">Power Play Goals</option>
-</select>
-
-<br/><br/>
-<button onclick="compareTeams()">Compare Teams</button>
-
-<p id="team-result"></p> -->
-
-<script>
-  fetch("/players").then(res => res.json()).then(players => {
-    window.playerData = players;
+  <script>
     fetch("/players").then(res => res.json()).then(players => {
-  window.playerData = players;
-  console.log("sample country:", players[0].country);
-  populateDropdowns(players);
-});
-    populateDropdowns(players);
-  });
+      window.playerData = players;
+      console.log("sample country:", players[0].country);
+      populateDropdowns(players);
+    });
 
-  function populateDropdowns(players) {
-    [1, 2].forEach(slot => {
+    function populateDropdowns(players) {
+      [1, 2].forEach(slot => {
+        const sel = document.getElementById("player" + slot);
+        sel.innerHTML = "<option value=''>Select Player</option>";
+        players.forEach(p => {
+          sel.innerHTML += `<option value="${p.name}">${p.name}</option>`;
+        });
+      });
+    }
+
+    function filterPlayers(slot) {
+      const country = document.getElementById("filter-country" + slot).value;
+      const filtered = country
+        ? window.playerData.filter(p => p.Country === country)
+        : window.playerData;
       const sel = document.getElementById("player" + slot);
       sel.innerHTML = "<option value=''>Select Player</option>";
-      //sel.innerHTML = "";
-      players.forEach(p => {
+      filtered.forEach(p => {
         sel.innerHTML += `<option value="${p.name}">${p.name}</option>`;
       });
-    });
-  }
+    }
 
-  function filterPlayers(slot) {
-    const country = document.getElementById("filter-country" + slot).value;
-    const filtered = country
-      ? window.playerData.filter(p => p.Country === country)
-      : window.playerData;
-    const sel = document.getElementById("player" + slot);
-    sel.innerHTML = "<option value=''>Select Player</option>";
-    //sel.innerHTML = "";
-    filtered.forEach(p => {
-      sel.innerHTML += `<option value="${p.name}">${p.name}</option>`;
-    });
-  }
-
-  function compare() {
-    const name1 = document.getElementById("player1").value;
-    const name2 = document.getElementById("player2").value;
-    const metric = document.getElementById("metric").value;
-    const p1 = window.playerData.find(p => p.name === name1);
-    const p2 = window.playerData.find(p => p.name === name2);
-    const winner = p1[metric] > p2[metric] ? p1.name : p2[metric] > p1[metric] ? p2.name : "Tie";
-    document.getElementById("result").innerText =
-      `${p1.name}: ${p1[metric]}\n${p2.name}: ${p2[metric]}`;
-  }
-
-  function loadDashboard() {
-    fetch("/dashboard").then(res => res.json()).then(data => {
+    function compare() {
+      const name1 = document.getElementById("player1").value;
+      const name2 = document.getElementById("player2").value;
+      const metric = document.getElementById("metric").value;
+      const p1 = window.playerData.find(p => p.name === name1);
+      const p2 = window.playerData.find(p => p.name === name2);
+      const winner = p1[metric] > p2[metric] ? p1.name : p2[metric] > p1[metric] ? p2.name : "Tie";
       document.getElementById("result").innerText =
-        "Top Team: " + data.TopTeam +
-        "\nTotal Games: " + data.TotalGamesPlayed +
-        "\nLeader: " + data.CurrentLeader;
-    });
-  }
+        `${p1.name}: ${p1[metric]}\n${p2.name}: ${p2[metric]}`;
+    }
 
-  // // Team comparison
-  // fetch("/teams").then(res => res.json()).then(teams => {
-  //   window.teamData = teams;
-  //   [1, 2].forEach(slot => {
-  //     const sel = document.getElementById("team" + slot);
-  //     sel.innerHTML = "";
-  //     teams.forEach(t => {
-  //       sel.innerHTML += `<option value="${t.name}">${t.name}</option>`;
-  //     });
-  //   });
-  // });
-
-  // function compareTeams() {
-  //   const name1  = document.getElementById("team1").value;
-  //   const name2  = document.getElementById("team2").value;
-  //   const metric = document.getElementById("team-metric").value;
-  //   const t1 = window.teamData.find(t => t.name === name1);
-  //   const t2 = window.teamData.find(t => t.name === name2);
-  //   const winner = t1[metric] > t2[metric] ? t1.name : t2[metric] > t1[metric] ? t2.name : "Tie";
-  //   document.getElementById("team-result").innerText =
-  //     `${t1.name}: ${t1[metric]}\n${t2.name}: ${t2[metric]}\n`;
-  // }
-</script>
+    function loadDashboard() {
+      fetch("/dashboard").then(res => res.json()).then(data => {
+        document.getElementById("result").innerText =
+          "Top Team: " + data.TopTeam +
+          "\nTotal Games: " + data.TotalGamesPlayed +
+          "\nLeader: " + data.CurrentLeader;
+      });
+    }
+  </script>
 </body>
 </html>

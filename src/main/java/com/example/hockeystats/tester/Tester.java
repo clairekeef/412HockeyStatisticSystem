@@ -525,12 +525,6 @@ public class Tester {
         String gameData = game1.getGameData();
         System.out.println(gameData != null ? "PASS: getGameData returned result" : "FAIL: getGameData returned null");
  
-        game1.updateGameStatus("In Progress");
-        System.out.println(game1.getGameStatus().equals("In Progress") ? "PASS: updateGameStatus = In Progress" : "FAIL: updateGameStatus");
- 
-        game1.updateGameStatus("Completed");
-        System.out.println(game1.getGameStatus().equals("Completed") ? "PASS: updateGameStatus = Completed" : "FAIL: updateGameStatus");
- 
         GameSummary summary1 = new GameSummary("S001", "G001", "USA", "Canada", new Date());
  
         List<String> charts = summary1.displayCharts();

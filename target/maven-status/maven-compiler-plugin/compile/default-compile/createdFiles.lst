@@ -5,6 +5,7 @@ com/example/hockeystats/model/PlayerStats.class
 com/example/hockeystats/model/Team.class
 com/example/hockeystats/model/Stats.class
 com/example/hockeystats/model/MetricCalculator.class
+com/example/hockeystats/model/GameDataRepository.class
 com/example/hockeystats/model/Profile.class
 com/example/hockeystats/model/TeamStats.class
 com/example/hockeystats/model/UserManagement.class
@@ -14,6 +15,7 @@ com/example/hockeystats/controller/AuthenticationModule.class
 com/example/hockeystats/model/User.class
 com/example/hockeystats/view/Dashboard.class
 com/example/hockeystats/model/UserRole.class
+com/example/hockeystats/tester/Tester.class
 com/example/hockeystats/controller/DashboardController.class
 com/example/hockeystats/model/Statistics.class
 com/example/hockeystats/model/GameSummary.class

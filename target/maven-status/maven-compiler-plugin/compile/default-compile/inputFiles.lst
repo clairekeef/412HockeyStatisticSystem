@@ -1,27 +1,6 @@
-<<<<<<< HEAD
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/controller/AuthenticationModule.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/UserManagement.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/HockeyStatisticsApplication.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/DataRepository.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/Game.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/Stats.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/controller/DashboardController.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/Profile.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/Team.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/view/Dashboard.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/Preferences.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/UserRole.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/PlayerStats.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/GameSummary.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/PerformanceDataEvaluation.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/TeamStats.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/MetricCalculator.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/controller/GameController.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/Statistics.java
-/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/User.java
-=======
 /Users/clairekeef/412HockeyStatisticSystem-1/src/main/java/com/example/hockeystats/model/PlayerStats.java
 /Users/clairekeef/412HockeyStatisticSystem-1/src/main/java/com/example/hockeystats/controller/AuthenticationModule.java
+/Users/clairekeef/412HockeyStatisticSystem-1/src/main/java/com/example/hockeystats/model/GameDataRepository.java
 /Users/clairekeef/412HockeyStatisticSystem-1/src/main/java/com/example/hockeystats/HockeyStatisticsApplication.java
 /Users/clairekeef/412HockeyStatisticSystem-1/src/main/java/com/example/hockeystats/controller/DashboardController.java
 /Users/clairekeef/412HockeyStatisticSystem-1/src/main/java/com/example/hockeystats/model/User.java
@@ -41,4 +20,3 @@
 /Users/clairekeef/412HockeyStatisticSystem-1/src/main/java/com/example/hockeystats/model/Game.java
 /Users/clairekeef/412HockeyStatisticSystem-1/src/main/java/com/example/hockeystats/model/Profile.java
 /Users/clairekeef/412HockeyStatisticSystem-1/src/main/java/com/example/hockeystats/model/DataRepository.java
->>>>>>> 00e59a702b495110aa33f419d5c923600aad3e38

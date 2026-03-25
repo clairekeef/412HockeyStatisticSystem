@@ -19,7 +19,6 @@ public class GameController {
     public void gameDetails(String gameID, String teamCountry, String opponentTeam,
         String location, Date date){
             Game game = new Game(gameID, teamCountry,opponentTeam,location, date);
-            game.updateGameStatus("Scheduled");
             games.add(game);
             System.out.println("Recent game: " + gameID  +"\n" + teamCountry + " vs " + opponentTeam);
             game.getGameData();

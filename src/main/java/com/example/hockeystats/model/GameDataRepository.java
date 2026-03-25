@@ -27,12 +27,12 @@ public class GameDataRepository {
 
     public GameDataRepository() {
         loadCSV("game.csv");
-        System.out.println("GameDataRepository initialized — " + allGames.size() + " games loaded.");
+        
     }
 
     public GameDataRepository(String csvPath) {
         loadCSV(csvPath);
-        System.out.println("GameDataRepository initialized — " + allGames.size() + " games loaded.");
+    
     }
 
     private void loadCSV(String path) {
@@ -55,12 +55,16 @@ public class GameDataRepository {
                 if (line.isEmpty()) continue;
 
                 // Skip header row
-                if (firstLine) {
-                    firstLine = false;
-                    if (line.toLowerCase().startsWith("gameid")) continue;
-                }
+               if (firstLine) {
+                firstLine = false;
+                String clean = line.replace("\uFEFF", "").trim().toLowerCase();
+                if (clean.startsWith("gameid")) continue;
+            }
+
 
                 parseAndStore(line);
+                System.out.println("Parsing: " + line);
+
             }
 
             reader.close();
@@ -79,7 +83,7 @@ public class GameDataRepository {
      */
     private void parseAndStore(String line) {
         String[] cols = line.split(",", -1);
-        if (cols.length < 5) {
+        if (cols.length <5) {
             System.err.println("GameRepository: skipping malformed row: " + line);
             return;
         }

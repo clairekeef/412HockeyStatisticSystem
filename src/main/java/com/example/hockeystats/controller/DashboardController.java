@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.hockeystats.view.Dashboard;
+import com.example.hockeystats.model.DataRepository;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import java.io.*;
@@ -46,6 +47,25 @@ public class DashboardController {
     reader.close();
     return players;
 }
+
+    @GetMapping("/teams")
+    public List<Map<String, Object>> getTeams() {
+        DataRepository repo = new DataRepository("playersforhtml.csv");
+        List<String> countries = repo.getAvailableCountries();
+        List<Map<String, Object>> teams = new ArrayList<>();
+        for (String country : countries) {
+            Map<String, Object> t = new HashMap<>();
+            t.put("name",    country);
+            t.put("G",   (int) repo.getMetricForCountry(country, "G"));
+            t.put("A",   (int) repo.getMetricForCountry(country, "A"));
+            t.put("PTS", (int) repo.getMetricForCountry(country, "PTS"));
+            t.put("GP",  (int) repo.getMetricForCountry(country, "GP"));
+            t.put("PIM", (int) repo.getMetricForCountry(country, "PIM"));
+            t.put("PPG", (int) repo.getMetricForCountry(country, "PPG"));
+            teams.add(t);
+        }
+        return teams;
+    }
 
 }
 // go to https://localhost:8080/ to view

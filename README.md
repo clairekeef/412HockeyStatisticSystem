@@ -22,5 +22,13 @@ mfr5829 - Marcela Ramirez Vadillo
     Implemented: Game and Game Summary classes. Tested these classes in the Tester and updated the UML diagram with all attributes and methods implemented. Also added activity and sequence diagram for View Game Information and Create Game Summary.
 
 
+
+For Instructors: 
+1. Install Java
+2. Run: java -jar HockeyDashboard-0.0.1-SNAPSHOT.jar
+3. Open: http://localhost:8080
+
+
+For Zambonis: 
 To run on mac in terminal: mvn spring-boot:run
 To run on Windwos in terminal: ./mvnw.cmd spring-boot:run

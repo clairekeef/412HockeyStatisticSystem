@@ -1,4 +1,20 @@
 # 412HockeyStatisticSystem
+
+How to Run without maven:
+    Make sure you have Java installed 
+    Open a terminal in the folder containing the .jar file
+    Run the following command: java -jar HockeyDashboard-0.0.1-SNAPSHOT.jar
+    Open your browser and go to: http://localhost:8080
+
+
+How to run with maven: 
+    To run on mac in terminal: mvn spring-boot:run
+    To run on Windwos in terminal: ./mvnw.cmd spring-boot:run
+
+
+
+    
+
 Please include Readme file to specify the usage of particular input values that facilitate the demonstration of various functional-flows / scenarios of your software system.
 
 Also include the effort contributions of each of the team-member in the readme file in following format:
@@ -20,15 +36,3 @@ mmb7354 - Matthew Bolger
     
 mfr5829 - Marcela Ramirez Vadillo
     Implemented: Game and Game Summary classes. Tested these classes in the Tester and updated the UML diagram with all attributes and methods implemented. Also added activity and sequence diagram for View Game Information and Create Game Summary.
-
-
-
-For Instructors: 
-1. Install Java
-2. Run: java -jar HockeyDashboard-0.0.1-SNAPSHOT.jar
-3. Open: http://localhost:8080
-
-
-For Zambonis: 
-To run on mac in terminal: mvn spring-boot:run
-To run on Windwos in terminal: ./mvnw.cmd spring-boot:run

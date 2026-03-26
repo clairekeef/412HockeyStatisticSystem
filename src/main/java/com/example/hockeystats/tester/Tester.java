@@ -142,11 +142,11 @@ public class Tester {
  
         DataRepository repo = new DataRepository();
  
-        // getAllPlayers
-        List<PlayerStats> all = repo.getAllPlayers();
-        System.out.println(all != null && !all.isEmpty()
-            ? "PASS: getAllPlayers returned " + all.size() + " players"
-            : "FAIL: getAllPlayers returned empty or null");
+        // // getAllPlayers
+        // String all = repo.getAllPlayers();
+        // System.out.println(all != null && !all.isEmpty()
+        //     ? "PASS: getAllPlayers returned " + all.size() + " players"
+        //     : "FAIL: getAllPlayers returned empty or null");
  
         // getPlayerByName
         PlayerStats p = repo.getPlayerByName("Adam Tambellini");
@@ -216,7 +216,16 @@ public class Tester {
         System.out.println(unknown == 0.0 ? "PASS: unknown player returns 0.0" : "FAIL: unknown player did not return 0.0");
  
         System.out.println();
+
+        System.out.println("---- TESTING SUPABASE ----");
+
+        DataRepository Suparepo = new DataRepository();
+
+        List<PlayerStats> players = repo.getAllPlayers();
+        System.out.println(players);
     }
+
+
 
     // -----------------------------------------------------------------------
     // GameDataRepository

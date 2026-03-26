@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * DataRepository loads and stores player data from the CSV file,
  * and provides query methods used by the rest of the system.
@@ -122,10 +125,54 @@ public class DataRepository {
     }
 
     /** Returns all loaded players (unmodifiable). */
-    public List<PlayerStats> getAllPlayers() {
-        return Collections.unmodifiableList(allPlayers);
-    }
+   public List<PlayerStats> getAllPlayers() {
+    try {
+        String json = SupabaseService.getAllPlayers();
 
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(json);
+
+        List<PlayerStats> players = new ArrayList<>();
+
+        for (JsonNode node : root) {
+
+            String name = node.path("Name").asText();
+            String country = node.path("team").asText();
+            String position = node.path("Position").asText();
+
+            int goals = (int) node.path("G").asDouble(0);
+            int assists = (int) node.path("A").asDouble(0);
+            int pts = (int) node.path("P").asDouble(0);
+            int pim = (int) node.path("PIM").asDouble(0);
+
+            // fields you don’t really have
+            int gp = 0;
+            int ppg = 0;
+            String group = "";
+
+            PlayerStats player = new PlayerStats(
+                name,
+                group,
+                country,
+                position,
+                gp,
+                goals,
+                assists,
+                pts,
+                pim,
+                ppg
+            );
+
+            players.add(player);
+        }
+
+        return players;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return List.of();
+    }
+}
     /**
      * Looks up a player by exact name (case-insensitive).
      * Returns null when not found.

@@ -32,7 +32,6 @@
       letter-spacing: 3px;
       line-height: 1;
       color: #fff;
-
     }
     .header .divider {
       width: 60px;
@@ -144,12 +143,10 @@
       letter-spacing: 1.5px;
       cursor: pointer;
       transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
-
     }
     .btn-primary:hover {
       background: #00bfff;
       transform: translateY(-2px);
-
     }
     .btn-primary:active { transform: translateY(0); }
 
@@ -177,13 +174,33 @@
       border: 1px solid rgba(0, 168, 232, 0.2);
       border-radius: 12px;
       padding: 18px 20px;
-      white-space: pre-line;
       font-size: 0.95rem;
       color: rgba(255,255,255,0.85);
       line-height: 1.7;
       display: none;
     }
-    #result:not(:empty) { display: block; }
+    #result.visible { display: block; }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .result-row:last-child { border-bottom: none; }
+    .result-label { color: rgba(255,255,255,0.5); font-size: 0.85rem; }
+    .result-value { font-weight: 600; }
+    .result-winner { color: #00a8e8; }
+
+    /* ── Loading / error states ── */
+    .status-msg {
+      text-align: center;
+      padding: 12px;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.4);
+    }
+    .error-msg { color: #ff6b6b; }
   </style>
 </head>
 <body>
@@ -197,39 +214,35 @@
   <div class="card">
 
     <div class="player-grid">
+      <!-- Player 1 -->
       <div>
         <div class="field-group">
           <label>Player 1 Country</label>
           <select id="filter-country1" onchange="filterPlayers(1)">
-            <option value="select">Select Country</option>
             <option value="">All Countries</option>
-            <option value="Canada">Canada</option>
-            <option value="USA">USA</option>
-            <option value="Germany">Germany</option>
-            <option value="China">China</option>
           </select>
         </div>
         <div class="field-group" style="margin-top:16px;">
           <label>Player 1</label>
-          <select id="player1"></select>
+          <select id="player1">
+            <option value="">Loading players…</option>
+          </select>
         </div>
       </div>
 
+      <!-- Player 2 -->
       <div>
         <div class="field-group">
           <label>Player 2 Country</label>
           <select id="filter-country2" onchange="filterPlayers(2)">
-            <option value="select">Select Country</option>
             <option value="">All Countries</option>
-            <option value="Canada">Canada</option>
-            <option value="USA">USA</option>
-            <option value="Germany">Germany</option>
-            <option value="China">China</option>
           </select>
         </div>
         <div class="field-group" style="margin-top:16px;">
           <label>Player 2</label>
-          <select id="player2"></select>
+          <select id="player2">
+            <option value="">Loading players…</option>
+          </select>
         </div>
       </div>
     </div>
@@ -239,7 +252,7 @@
     <div class="metric-row">
       <label>Metric</label>
       <select id="metric">
-        <option value="select">Select Metric</option>
+        <option value="">Select Metric</option>
         <option value="G">Goals</option>
         <option value="A">Assists</option>
         <option value="PTS">Points</option>
@@ -254,57 +267,127 @@
       <button class="btn-secondary" onclick="loadDashboard()">Load Dashboard</button>
     </div>
 
-    <p id="result"></p>
+    <div id="result"></div>
 
   </div>
 
   <script>
-    fetch("/players").then(res => res.json()).then(players => {
-      window.playerData = players;
-      console.log("sample country:", players[0].country);
-      populateDropdowns(players);
-    });
+    // ── Data store ──────────────────────────────────────────────
+    let playerData = [];
 
-    function populateDropdowns(players) {
+    // ── Bootstrap: load players from Spring Boot → Supabase ─────
+    fetch("/players")
+      .then(res => {
+        if (!res.ok) throw new Error("Server error: " + res.status);
+        return res.json();
+      })
+      .then(players => {
+        playerData = players;
+        populateCountryDropdowns(players);
+        populatePlayerDropdown(1, players);
+        populatePlayerDropdown(2, players);
+      })
+      .catch(err => {
+        showResult(`<p class="error-msg">Failed to load players: ${err.message}</p>`);
+      });
+
+    // ── Populate country filter dropdowns dynamically ────────────
+    // FIX: was hardcoded; now built from actual data so no country is missing
+    function populateCountryDropdowns(players) {
+      const countries = [...new Set(players.map(p => p.country).filter(Boolean))].sort();
       [1, 2].forEach(slot => {
-        const sel = document.getElementById("player" + slot);
-        sel.innerHTML = "<option value=''>Select Player</option>";
-        players.forEach(p => {
-          sel.innerHTML += `<option value="${p.name}">${p.name}</option>`;
+        const sel = document.getElementById("filter-country" + slot);
+        sel.innerHTML = `<option value="">All Countries</option>`;
+        countries.forEach(c => {
+          sel.innerHTML += `<option value="${c}">${c}</option>`;
         });
       });
     }
 
-    function filterPlayers(slot) {
-      const country = document.getElementById("filter-country" + slot).value;
-      const filtered = country
-        ? window.playerData.filter(p => p.Country === country)
-        : window.playerData;
+    // ── Populate a player dropdown (optionally filtered by country) ──
+    function populatePlayerDropdown(slot, players) {
       const sel = document.getElementById("player" + slot);
-      sel.innerHTML = "<option value=''>Select Player</option>";
-      filtered.forEach(p => {
+      sel.innerHTML = `<option value="">Select Player</option>`;
+      players.forEach(p => {
         sel.innerHTML += `<option value="${p.name}">${p.name}</option>`;
       });
     }
 
-    function compare() {
-      const name1 = document.getElementById("player1").value;
-      const name2 = document.getElementById("player2").value;
-      const metric = document.getElementById("metric").value;
-      const p1 = window.playerData.find(p => p.name === name1);
-      const p2 = window.playerData.find(p => p.name === name2);
-      const winner = p1[metric] > p2[metric] ? p1.name : p2[metric] > p1[metric] ? p2.name : "Tie";
-      document.getElementById("result").innerText =
-        `${p1.name}: ${p1[metric]}\n${p2.name}: ${p2[metric]}`;
+    // ── Filter players by country ────────────────────────────────
+    // FIX: was using p.Country (undefined) — now correctly uses p.country (lowercase)
+    function filterPlayers(slot) {
+      const country = document.getElementById("filter-country" + slot).value;
+      const filtered = country
+        ? playerData.filter(p => p.country === country)
+        : playerData;
+      populatePlayerDropdown(slot, filtered);
     }
 
+    // ── Compare two players on a chosen metric ───────────────────
+    function compare() {
+      const name1  = document.getElementById("player1").value;
+      const name2  = document.getElementById("player2").value;
+      const metric = document.getElementById("metric").value;
+
+      // FIX: guard against unselected dropdowns
+      if (!name1 || !name2) {
+        showResult(`<p class="error-msg">Please select both players.</p>`);
+        return;
+      }
+      if (!metric) {
+        showResult(`<p class="error-msg">Please select a metric.</p>`);
+        return;
+      }
+
+      const p1 = playerData.find(p => p.name === name1);
+      const p2 = playerData.find(p => p.name === name2);
+
+      if (!p1 || !p2) {
+        showResult(`<p class="error-msg">Could not find player data.</p>`);
+        return;
+      }
+
+      const v1 = p1[metric] ?? 0;
+      const v2 = p2[metric] ?? 0;
+      const metricLabel = document.getElementById("metric").selectedOptions[0].text;
+
+      let winnerLine = "";
+      if (v1 > v2)       winnerLine = `<div class="result-row"><span class="result-label">Winner</span><span class="result-value result-winner">🏒 ${p1.name}</span></div>`;
+      else if (v2 > v1)  winnerLine = `<div class="result-row"><span class="result-label">Winner</span><span class="result-value result-winner">🏒 ${p2.name}</span></div>`;
+      else               winnerLine = `<div class="result-row"><span class="result-label">Result</span><span class="result-value">Tie</span></div>`;
+
+      showResult(`
+        <div class="result-row"><span class="result-label">Metric</span><span class="result-value">${metricLabel}</span></div>
+        <div class="result-row"><span class="result-label">${p1.name}</span><span class="result-value">${v1}</span></div>
+        <div class="result-row"><span class="result-label">${p2.name}</span><span class="result-value">${v2}</span></div>
+        ${winnerLine}
+      `);
+    }
+
+    // ── Load dashboard summary ───────────────────────────────────
     function loadDashboard() {
-      fetch("/dashboard").then(res => res.json()).then(data => {
-        document.getElementById("result").innerText =
-          "Top Team: " + data.TopTeam +
-          "\nTotal Games: " + data.TotalGamesPlayed +
-          "\nLeader: " + data.CurrentLeader;
-      });
+      fetch("/dashboard")
+        .then(res => {
+          if (!res.ok) throw new Error("Server error: " + res.status);
+          return res.json();
+        })
+        .then(data => {
+          showResult(`
+            <div class="result-row"><span class="result-label">Top Team</span><span class="result-value result-winner">${data.TopTeam ?? "N/A"}</span></div>
+            <div class="result-row"><span class="result-label">Total Games</span><span class="result-value">${data.TotalGamesPlayed ?? "N/A"}</span></div>
+            <div class="result-row"><span class="result-label">Points Leader</span><span class="result-value result-winner">${data.CurrentLeader ?? "N/A"}</span></div>
+          `);
+        })
+        .catch(err => {
+          showResult(`<p class="error-msg">Failed to load dashboard: ${err.message}</p>`);
+        });
+    }
+
+    // ── Helper: render into result box ──────────────────────────
+    function showResult(html) {
+      const el = document.getElementById("result");
+      el.innerHTML = html;
+      el.classList.add("visible");
     }
   </script>
 </body>

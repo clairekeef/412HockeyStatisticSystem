@@ -12,6 +12,7 @@ How to run with maven:
     To run on Windwos in terminal: ./mvnw.cmd spring-boot:run
 
 M03-A04 - Implementing Design Patterns
+- specifies each of the pattern implementations i.e. the class or classes where the patterns are implemented.
 
 Design Patterns
 

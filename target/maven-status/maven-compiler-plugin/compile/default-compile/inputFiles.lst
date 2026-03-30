@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\User.java
 C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\GameDataRepository.java
 C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Preferences.java
@@ -20,3 +21,12 @@ C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\
 C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\PerformanceDataEvaluation.java
 C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\UserRole.java
 C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Statistics.java
+=======
+/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/HockeyStatisticsApplication.java
+/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/DataRepository.java
+/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/controller/DashboardController.java
+/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/Team.java
+/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/view/Dashboard.java
+/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/SupabaseService.java
+/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/PlayerStats.java
+>>>>>>> 15c9a36ba59f5a8d2e7c7b99e5a34602dccbf569

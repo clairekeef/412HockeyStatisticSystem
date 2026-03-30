@@ -1,274 +1,165 @@
 package com.example.hockeystats.model;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-/**
- * DataRepository loads and stores player data from the CSV file,
- * and provides query methods used by the rest of the system.
- *
- * CSV format:
- *   Name,Group,Country,Position,GP,G,A,PTS,PIM,PPG
- */
 public class DataRepository {
 
-    // Keyed by player name (case-insensitive lookup via toLowerCase)
-    private final Map<String, PlayerStats> playersByName = new HashMap<>();
-
-    // Keyed by country name (case-insensitive)
-    private final Map<String, List<PlayerStats>> playersByCountry = new HashMap<>();
-
-    // Keyed by group label (e.g. "A")
-    private final Map<String, List<PlayerStats>> playersByGroup = new HashMap<>();
-
-    // Master list preserving CSV order
-    private final List<PlayerStats> allPlayers = new ArrayList<>();
+    private final Map<String, PlayerStats> playersByName;        // lowercase key
+    private final Map<String, List<PlayerStats>> playersByCountry; // lowercase key
+    private final Map<String, List<PlayerStats>> playersByPosition; // lowercase key
+    private final List<PlayerStats> allPlayers;
 
     public DataRepository() {
-        loadCSV("Players.csv");
-        //System.out.println("DataRepository initialized — " + allPlayers.size() + " players loaded.");
-    }
+        List<PlayerStats> players = fetchPlayersFromSupabase();
+        this.allPlayers = new ArrayList<>(players);
+        this.playersByName     = new HashMap<>();
+        this.playersByCountry  = new HashMap<>();
+        this.playersByPosition = new HashMap<>();
 
-    /**
-     * Secondary constructor that accepts an explicit CSV path (useful for tests
-     * that need to pass a different file or an absolute path).
-     */
-    public DataRepository(String csvPath) {
-        loadCSV(csvPath);
-        //System.out.println("DataRepository initialized — " + allPlayers.size() + " players loaded.");
-    }
-
-    private void loadCSV(String path) {
-        InputStream stream = getClass().getClassLoader().getResourceAsStream(path);
-
-        try {
-            BufferedReader reader;
-            if (stream != null) {
-                reader = new BufferedReader(new InputStreamReader(stream));
-            } else {
-                reader = new BufferedReader(new FileReader(path));
-            }
-
-            String line;
-            boolean firstLine = true;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty()) continue;
-
-                // Skip header row
-                if (firstLine) {
-                    firstLine = false;
-                    if (line.toLowerCase().startsWith("name")) continue;
-                }
-
-                parseAndStore(line);
-            }
-            reader.close();
-
-        } catch (IOException e) {
-            System.err.println("DataRepository: could not load CSV from '" + path + "': " + e.getMessage());
-        }
-    }
-
-    /**
-     * Parses a single CSV row and registers the resulting PlayerStats object
-     * in all internal indexes.
-     */
-    private void parseAndStore(String line) {
-        String[] cols = line.split(",", -1);
-        if (cols.length < 10) {
-            System.err.println("DataRepository: skipping malformed row: " + line);
-            return;
-        }
-
-        try {
-            String name     = cols[0].trim();
-            String group    = cols[1].trim();
-            String country  = cols[2].trim();
-            String position = cols[3].trim();
-            int    gp       = Integer.parseInt(cols[4].trim());
-            int    goals    = Integer.parseInt(cols[5].trim());
-            int    assists  = Integer.parseInt(cols[6].trim());
-            int    pts      = Integer.parseInt(cols[7].trim());
-            int    pim      = Integer.parseInt(cols[8].trim());
-            int    ppg      = Integer.parseInt(cols[9].trim());
-
-            PlayerStats player = new PlayerStats(name, group, country, position,
-                                                  gp, goals, assists, pts, pim, ppg);
-            allPlayers.add(player);
-
-            playersByName.put(name.toLowerCase(), player);
-
+        for (PlayerStats p : players) {
+            playersByName.put(p.getName().toLowerCase(), p);
             playersByCountry
-                .computeIfAbsent(country.toLowerCase(), k -> new ArrayList<>())
-                .add(player);
-
-            playersByGroup
-                .computeIfAbsent(group.toLowerCase(), k -> new ArrayList<>())
-                .add(player);
-
-        } catch (NumberFormatException e) {
-            System.err.println("DataRepository: skipping row with bad numeric field: " + line);
+                .computeIfAbsent(p.getCountry().toLowerCase(), k -> new ArrayList<>())
+                .add(p);
+            if (p.getPosition() != null && !p.getPosition().isBlank()) {
+                playersByPosition
+                    .computeIfAbsent(p.getPosition().toLowerCase(), k -> new ArrayList<>())
+                    .add(p);
+            }
         }
     }
 
-    /** Returns all loaded players (unmodifiable). */
+    private List<PlayerStats> fetchPlayersFromSupabase() {
+        try {
+            String json = SupabaseService.getAllPlayers();
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(json);
+            List<PlayerStats> players = new ArrayList<>();
+            for (JsonNode node : root) {
+                String name     = node.path("Name").asText();
+                String country  = node.path("team").asText();
+                String position = node.path("Position").asText();
+                int goals   = (int) node.path("G").asDouble(0);
+                int assists = (int) node.path("A").asDouble(0);
+                int pts     = (int) node.path("P").asDouble(0);
+                int pim     = (int) node.path("PIM").asDouble(0);
+                players.add(new PlayerStats(name, "", country, position, 0, goals, assists, pts, pim, 0));
+            }
+            return players;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
+    }
+
+    // ── Basic lookups ────────────────────────────────────────────
+
     public List<PlayerStats> getAllPlayers() {
         return Collections.unmodifiableList(allPlayers);
     }
 
-    /**
-     * Looks up a player by exact name (case-insensitive).
-     * Returns null when not found.
-     */
+    /** Case-insensitive lookup by name. Returns null if not found. */
     public PlayerStats getPlayerByName(String name) {
         if (name == null) return null;
         return playersByName.get(name.toLowerCase());
     }
 
-    /**
-     * Returns all players representing the given country (case-insensitive).
-     */
+    /** Case-insensitive lookup by country. Returns empty list if not found. */
     public List<PlayerStats> getPlayersByCountry(String country) {
-        if (country == null) return Collections.emptyList();
-        List<PlayerStats> result = playersByCountry.get(country.toLowerCase());
-        return result != null ? Collections.unmodifiableList(result) : Collections.emptyList();
+        if (country == null) return List.of();
+        return playersByCountry.getOrDefault(country.toLowerCase(), List.of());
     }
 
-    /**
-     * Returns all players in the given tournament group (case-insensitive).
-     */
-    public List<PlayerStats> getPlayersByGroup(String group) {
-        if (group == null) return Collections.emptyList();
-        List<PlayerStats> result = playersByGroup.get(group.toLowerCase());
-        return result != null ? Collections.unmodifiableList(result) : Collections.emptyList();
-    }
-
-    /**
-     * Returns all players that play the given position (case-insensitive).
-     * Common values: "Forward", "Defence".
-     */
+    /** Case-insensitive lookup by position (e.g. "Forward", "Defence"). */
     public List<PlayerStats> getPlayersByPosition(String position) {
-        if (position == null) return Collections.emptyList();
-        return allPlayers.stream()
-            .filter(p -> p.getPosition().equalsIgnoreCase(position))
-            .collect(Collectors.toList());
+        if (position == null) return List.of();
+        return playersByPosition.getOrDefault(position.toLowerCase(), List.of());
     }
 
-    /**
-     * Returns the top {@code n} scorers across all loaded data,
-     * ranked by total points (PTS), with goals as a tiebreaker.
-     */
-    public List<PlayerStats> getTopScorers(int n) {
+    // ── Top scorers ──────────────────────────────────────────────
+
+    public List<PlayerStats> getTopScorers(int limit) {
         return allPlayers.stream()
-            .sorted((a, b) -> {
-                int cmp = Integer.compare(b.getPts(), a.getPts());
-                return cmp != 0 ? cmp : Integer.compare(b.getGoals(), a.getGoals());
-            })
-            .limit(n)
-            .collect(Collectors.toList());
+            .sorted((a, b) -> Integer.compare(b.getPts(), a.getPts()))
+            .limit(limit)
+            .toList();
     }
 
-    /**
-     * Returns the top {@code n} scorers for the specified country.
-     */
-    public List<PlayerStats> getTopScorersByCountry(String country, int n) {
+    public List<PlayerStats> getTopScorersByCountry(String country, int limit) {
         return getPlayersByCountry(country).stream()
-            .sorted((a, b) -> {
-                int cmp = Integer.compare(b.getPts(), a.getPts());
-                return cmp != 0 ? cmp : Integer.compare(b.getGoals(), a.getGoals());
-            })
-            .limit(n)
-            .collect(Collectors.toList());
+            .sorted((a, b) -> Integer.compare(b.getPts(), a.getPts()))
+            .limit(limit)
+            .toList();
     }
 
-    /**
-     * Returns a map of country → total goals, useful for team-level comparisons.
-     */
-    public Map<String, Integer> getGoalsByCountry() {
-        Map<String, Integer> result = new HashMap<>();
-        for (Map.Entry<String, List<PlayerStats>> entry : playersByCountry.entrySet()) {
-            int totalGoals = entry.getValue().stream()
-                .mapToInt(PlayerStats::getGoals)
-                .sum();
-            String displayName = entry.getValue().get(0).getCountry();
-            result.put(displayName, totalGoals);
-        }
-        return result;
-    }
+    // ── Country-level aggregations ───────────────────────────────
 
-    /**
-     * Returns a map of country → total points, useful for team-level comparisons.
-     */
-    public Map<String, Integer> getPointsByCountry() {
-        Map<String, Integer> result = new HashMap<>();
-        for (Map.Entry<String, List<PlayerStats>> entry : playersByCountry.entrySet()) {
-            int totalPts = entry.getValue().stream()
-                .mapToInt(PlayerStats::getPts)
-                .sum();
-            String displayName = entry.getValue().get(0).getCountry();
-            result.put(displayName, totalPts);
-        }
-        return result;
-    }
-
-    /**
-     * Returns the list of distinct country names present in the loaded data.
-     */
+    /** Returns a sorted list of all distinct country names. */
     public List<String> getAvailableCountries() {
-        return playersByCountry.values().stream()
-            .map(list -> list.get(0).getCountry())
+        return playersByCountry.keySet().stream()
+            .map(k -> playersByCountry.get(k).get(0).getCountry()) // original casing
+            .distinct()
             .sorted()
             .collect(Collectors.toList());
     }
 
+    /** Returns total goals per country (original country name as key). */
+    public Map<String, Integer> getGoalsByCountry() {
+        Map<String, Integer> result = new LinkedHashMap<>();
+        for (List<PlayerStats> players : playersByCountry.values()) {
+            String country = players.get(0).getCountry();
+            int total = players.stream().mapToInt(PlayerStats::getGoals).sum();
+            result.put(country, total);
+        }
+        return result;
+    }
+
+    /** Returns total points per country (original country name as key). */
+    public Map<String, Integer> getPointsByCountry() {
+        Map<String, Integer> result = new LinkedHashMap<>();
+        for (List<PlayerStats> players : playersByCountry.values()) {
+            String country = players.get(0).getCountry();
+            int total = players.stream().mapToInt(PlayerStats::getPts).sum();
+            result.put(country, total);
+        }
+        return result;
+    }
+
+    // ── Metric helpers ───────────────────────────────────────────
+
     /**
-     * Returns a numeric metric value for a named player.
-     * Supported: "Goals"/"G", "Assists"/"A", "Points"/"PTS", "PIM", "PPG", "GP".
-     * Returns 0.0 when the player or metric is not found.
+     * Returns a numeric metric for a single player by name.
+     * Supported keys: G, Goals, A, Assists, P, PTS, Points, PIM, PPG, GP
      */
-    public double getMetricForPlayer(String playerName, String metric) {
-        PlayerStats p = getPlayerByName(playerName);
-        if (p == null) return 0.0;
+    public double getMetricForPlayer(String name, String metric) {
+        PlayerStats p = getPlayerByName(name);
+        if (p == null || metric == null) return 0.0;
         return extractMetric(p, metric);
     }
 
     /**
-     * Returns a numeric metric value summed across all players of a country.
+     * Returns the sum of a metric across all players from a given country.
+     * Same metric keys as getMetricForPlayer.
      */
     public double getMetricForCountry(String country, String metric) {
+        if (country == null || metric == null) return 0.0;
         return getPlayersByCountry(country).stream()
             .mapToDouble(p -> extractMetric(p, metric))
             .sum();
     }
 
     private double extractMetric(PlayerStats p, String metric) {
-        if (metric == null) return 0.0;
-        switch (metric.toUpperCase()) {
-            case "GOALS": case "G":    return p.getGoals();
-            case "ASSISTS": case "A":  return p.getAssists();
-            case "POINTS": case "PTS": return p.getPts();
-            case "PIM":                return p.getPim();
-            case "PPG":                return p.getPpg();
-            case "GP":                 return p.getGp();
-            default:
-                System.err.println("DataRepository: unknown metric '" + metric + "'");
-                return 0.0;
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "DataRepository{players=" + allPlayers.size()
-            + ", countries=" + playersByCountry.size() + "}";
+        return switch (metric) {
+            case "G", "Goals"           -> p.getGoals();
+            case "A", "Assists"         -> p.getAssists();
+            case "P", "PTS", "Points"   -> p.getPts();
+            case "PIM"                  -> p.getPim();
+            case "PPG"                  -> p.getPpg();
+            case "GP"                   -> p.getGp();
+            default                     -> 0.0;
+        };
     }
 }

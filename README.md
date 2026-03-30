@@ -18,7 +18,7 @@ Design Patterns
 
 Claire - Strategy Pattern
 
-Avery
+Avery - Observer
 
 Marcela
 
@@ -28,7 +28,7 @@ UI Patterns
 
 Claire - Search Filters
 
-Avery
+Avery - Dashboard
 
 Marcela
 

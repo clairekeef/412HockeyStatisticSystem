@@ -11,6 +11,26 @@ How to run with maven:
     To run on mac in terminal: mvn spring-boot:run
     To run on Windwos in terminal: ./mvnw.cmd spring-boot:run
 
+M03-A04 - Implementing Design Patterns
 
+Design Patterns
+
+Claire
+
+Avery
+
+Marcela
+
+Matt
+
+UI Patterns
+
+Claire
+
+Avery
+
+Marcela
+
+Matt
 
 

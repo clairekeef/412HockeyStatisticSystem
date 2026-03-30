@@ -20,9 +20,9 @@ Claire - Strategy Pattern
 
 Avery - Observer
 
-Marcela
+Marcela - Builder
 
-Matt
+Matt - Prototype Creational Pattern
 
 UI Patterns
 
@@ -30,8 +30,8 @@ Claire - Search Filters
 
 Avery - Dashboard
 
-Marcela
+Marcela - Formatting Data
 
-Matt
+Matt - Card
 
 

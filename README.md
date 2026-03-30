@@ -15,7 +15,7 @@ M03-A04 - Implementing Design Patterns
 
 Design Patterns
 
-Claire
+Claire - Strategy Pattern
 
 Avery
 
@@ -25,7 +25,7 @@ Matt
 
 UI Patterns
 
-Claire
+Claire - Search Filters
 
 Avery
 

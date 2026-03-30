@@ -12,8 +12,14 @@ public class DataRepository {
     private final Map<String, List<PlayerStats>> playersByPosition;
     private final List<PlayerStats> allPlayers;
 
+    // Default: men's data
     public DataRepository() {
-        List<PlayerStats> players = fetchPlayersFromSupabase();
+        this(true);
+    }
+
+    // true = men, false = women
+    public DataRepository(boolean men) {
+        List<PlayerStats> players = fetchPlayers(men);
         this.allPlayers        = new ArrayList<>(players);
         this.playersByName     = new HashMap<>();
         this.playersByCountry  = new HashMap<>();
@@ -34,21 +40,19 @@ public class DataRepository {
         }
     }
 
-    private List<PlayerStats> fetchPlayersFromSupabase() {
+    private List<PlayerStats> fetchPlayers(boolean men) {
         try {
-            String json = SupabaseService.getAllPlayers();
-            System.out.println("Fetched JSON length: " + json.length() + " chars");
-System.out.println("First 200 chars: " + json.substring(0, Math.min(200, json.length())));
+            String json = men
+                ? SupabaseService.getAllPlayers()
+                : SupabaseService.getWomenPlayers();
+
             ObjectMapper mapper = new ObjectMapper();
             JsonNode root = mapper.readTree(json);
 
-            // key = "cleanName|team" -> aggregated stats
             Map<String, int[]> agg  = new LinkedHashMap<>();
             Map<String, String[]> meta = new LinkedHashMap<>();
 
             for (JsonNode node : root) {
-
-
                 String rawName  = node.path("Name").asText("").trim();
                 String team     = node.path("team").asText("").trim();
                 String position = node.path("Position").asText("").trim();
@@ -65,7 +69,7 @@ System.out.println("First 200 chars: " + json.substring(0, Math.min(200, json.le
                 agg.get(key)[1] += a;
                 agg.get(key)[2] += p;
                 agg.get(key)[3] += pim;
-                agg.get(key)[4] += 1; // games played
+                agg.get(key)[4] += 1;
 
                 meta.putIfAbsent(key, new String[]{ cleaned, team, position });
             }
@@ -83,18 +87,12 @@ System.out.println("First 200 chars: " + json.substring(0, Math.min(200, json.le
             }
 
             return players;
-
         } catch (Exception e) {
             e.printStackTrace();
             return List.of();
         }
     }
 
-    /**
-     * Cleans garbled names like "TAMBELLINI ATAMBELLINI Adam" -> "Adam Tambellini"
-     * Format: LASTNAME FIRSTINITLASTNAME Firstname [Middle]
-     * Real first name parts are mixed case; the garbled token is all-caps.
-     */
     private String cleanName(String raw) {
         if (raw == null || raw.isBlank()) return raw;
         String[] parts = raw.trim().split("\\s+");
@@ -121,8 +119,6 @@ System.out.println("First 200 chars: " + json.substring(0, Math.min(200, json.le
         catch (Exception e) { return 0; }
     }
 
-    // ── Basic lookups ────────────────────────────────────────────
-
     public List<PlayerStats> getAllPlayers() {
         return Collections.unmodifiableList(allPlayers);
     }
@@ -142,8 +138,6 @@ System.out.println("First 200 chars: " + json.substring(0, Math.min(200, json.le
         return playersByPosition.getOrDefault(position.toLowerCase(), List.of());
     }
 
-    // ── Top scorers ──────────────────────────────────────────────
-
     public List<PlayerStats> getTopScorers(int limit) {
         return allPlayers.stream()
             .sorted((a, b) -> Integer.compare(b.getPts(), a.getPts()))
@@ -157,8 +151,6 @@ System.out.println("First 200 chars: " + json.substring(0, Math.min(200, json.le
             .limit(limit)
             .toList();
     }
-
-    // ── Country aggregations ─────────────────────────────────────
 
     public List<String> getAvailableCountries() {
         return playersByCountry.keySet().stream()
@@ -184,8 +176,6 @@ System.out.println("First 200 chars: " + json.substring(0, Math.min(200, json.le
         }
         return result;
     }
-
-    // ── Metric helpers ───────────────────────────────────────────
 
     public double getMetricForPlayer(String name, String metric) {
         PlayerStats p = getPlayerByName(name);

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Game.java
 C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\controller\AuthenticationModule.java
 C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\MetricCalculator.java
@@ -20,3 +21,14 @@ C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\
 C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\controller\DashboardController.java
 C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\DataRepository.java
 C:\Users\mattb\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\HockeyStatisticsApplication.java
+=======
+C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Game.java
+C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\PlayerStats.java
+C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\DataRepository.java
+C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\SupabaseService.java
+C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\view\Dashboard.java
+C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\HockeyStatisticsApplication.java
+C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\Team.java
+C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\controller\DashboardController.java
+C:\Users\mache\OneDrive\Documents\GitHub\412HockeyStatisticSystem\src\main\java\com\example\hockeystats\model\GameSummary.java
+>>>>>>> bb07f00c2270831b48ec93d20b61c9ecedfb6b4f

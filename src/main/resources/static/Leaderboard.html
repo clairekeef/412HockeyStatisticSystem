@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PuckVision — Leaderboard</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .filter-row { display: flex; gap: 12px; margin-bottom: 28px; align-items: flex-end; flex-wrap: wrap; }
+    .filter-row .field { min-width: 160px; }
+    .medal { font-size: 1.1rem; }
+    .country-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; background: var(--accent); }
+    .pts-bar-bg { width: 100px; height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; display: inline-block; vertical-align: middle; overflow: hidden; }
+    .pts-bar-fill { height: 100%; border-radius: 3px; background: var(--accent); }
+    .sort-btn { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 0.65rem; letter-spacing: 1px; text-transform: uppercase; padding: 2px 4px; }
+    .sort-btn:hover { color: var(--accent); }
+    .sort-btn.active { color: var(--accent); }
+    th.sortable { cursor: pointer; user-select: none; }
+    th.sortable:hover { color: var(--text); }
+    th.sortable.asc::after { content: ' ↑'; }
+    th.sortable.desc::after { content: ' ↓'; }
+    .search-wrap { position: relative; }
+    .search-wrap input { padding-left: 36px; }
+    .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-logo"><p class="eyebrow">Beijing 2022</p><h1>PuckVision</h1></div>
+    <a href="index.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+    <a href="compare.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M8 21H3v-5M21 3l-7 7M3 21l7-7"/></svg>Compare Players</a>
+    <a href="leaderboard.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Leaderboard</a>
+    <a href="teams.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Teams</a>
+    <a href="results.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Results</a>
+    <a href="player.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Player Profile</a>
+    <div class="nav-bottom"><div class="nav-user" id="nav-user-email"></div><button class="btn-logout" onclick="logout()">Sign Out</button></div>
+  </nav>
+
+  <main class="main">
+    <div class="page-header fade-up">
+      <p class="eyebrow">Rankings</p>
+      <h2>Leaderboard</h2>
+      <p>Top performers sorted by points</p>
+    </div>
+
+    <div class="filter-row fade-up-2">
+      <div class="field">
+        <label class="field-label">Country</label>
+        <select id="filter-country" onchange="render()"><option value="">All Countries</option></select>
+      </div>
+      <div class="field">
+        <label class="field-label">Position</label>
+        <select id="filter-pos" onchange="render()">
+          <option value="">All Positions</option>
+          <option value="F">Forward</option>
+          <option value="D">Defence</option>
+          <option value="GK">Goalie</option>
+        </select>
+      </div>
+      <div class="field search-wrap">
+        <label class="field-label">Search</label>
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="search" placeholder="Player name..." oninput="render()">
+      </div>
+    </div>
+
+    <div class="card fade-up-3">
+      <table class="data-table" id="lb-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Player</th>
+            <th>Country</th>
+            <th>Pos</th>
+            <th class="sortable" onclick="sortBy('GP')">GP</th>
+            <th class="sortable" onclick="sortBy('G')">G</th>
+            <th class="sortable" onclick="sortBy('A')">A</th>
+            <th class="sortable desc" onclick="sortBy('PTS')">PTS</th>
+            <th class="sortable" onclick="sortBy('PIM')">PIM</th>
+            <th>Pts Bar</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="lb-body"><tr><td colspan="11" class="loading">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src="shared.js"></script>
+  <script>
+    let allPlayers = [];
+    let sortCol = 'PTS';
+    let sortDir = 'desc';
+
+    requireAuth().then(async () => {
+      const res = await fetch(getPlayersEndpoint());
+      allPlayers = await res.json();
+
+      const countries = [...new Set(allPlayers.map(p => p.country).filter(Boolean))].sort();
+      const sel = document.getElementById('filter-country');
+      countries.forEach(c => sel.innerHTML += `<option value="${c}">${c}</option>`);
+      render();
+    });
+
+    function sortBy(col) {
+      if (sortCol === col) sortDir = sortDir === 'desc' ? 'asc' : 'desc';
+      else { sortCol = col; sortDir = 'desc'; }
+      document.querySelectorAll('th.sortable').forEach(th => {
+        th.classList.remove('asc','desc');
+        if (th.textContent.trim() === col) th.classList.add(sortDir);
+      });
+      render();
+    }
+
+    function render() {
+      const country = document.getElementById('filter-country').value;
+      const pos     = document.getElementById('filter-pos').value;
+      const search  = document.getElementById('search').value.toLowerCase();
+
+      let filtered = allPlayers
+        .filter(p => !country || p.country === country)
+        .filter(p => !pos || (p.position || '').toUpperCase().startsWith(pos))
+        .filter(p => !search || p.name.toLowerCase().includes(search));
+
+      filtered.sort((a, b) => {
+        const va = a[sortCol] ?? 0, vb = b[sortCol] ?? 0;
+        return sortDir === 'desc' ? vb - va : va - vb;
+      });
+
+      const maxPts = Math.max(...filtered.map(p => p.PTS || 0), 1);
+      const medals = ['🥇','🥈','🥉'];
+
+      document.getElementById('lb-body').innerHTML = filtered.length === 0
+        ? '<tr><td colspan="11" class="loading">No players found.</td></tr>'
+        : filtered.map((p, i) => `
+          <tr>
+            <td class="rank ${i < 3 ? 'top' : ''}">${i < 3 ? medals[i] : i + 1}</td>
+            <td><a href="player.html?name=${encodeURIComponent(p.name)}" style="color:var(--text);text-decoration:none;font-weight:500">${p.name}</a></td>
+            <td style="color:var(--muted)">${p.country || '—'}</td>
+            <td><span class="badge badge-blue">${p.position || '—'}</span></td>
+            <td>${p.GP ?? 0}</td>
+            <td style="color:var(--accent);font-weight:600">${p.G ?? 0}</td>
+            <td>${p.A ?? 0}</td>
+            <td style="font-weight:600">${p.PTS ?? 0}</td>
+            <td style="color:var(--muted)">${p.PIM ?? 0}</td>
+            <td><div class="pts-bar-bg"><div class="pts-bar-fill" style="width:${((p.PTS||0)/maxPts*100).toFixed(1)}%"></div></div></td>
+            <td><a href="player.html?name=${encodeURIComponent(p.name)}" style="color:var(--accent);font-size:0.78rem;text-decoration:none">View →</a></td>
+          </tr>`).join('');
+    }
+  </script>
+</body>
+</html>

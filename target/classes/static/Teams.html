@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PuckVision — Teams</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .team-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+    .team-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; transition: all 0.2s; cursor: pointer; }
+    .team-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,194,255,0.08); }
+    .team-card.selected { border-color: var(--accent); background: rgba(0,194,255,0.06); }
+    .team-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1.8rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 4px; }
+    .team-player-count { font-size: 0.75rem; color: var(--muted); letter-spacing: 1px; margin-bottom: 20px; }
+    .team-stats-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .team-detail { margin-top: 32px; display: none; }
+    .team-detail.visible { display: block; }
+    .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .detail-title { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 800; }
+    .close-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: 'Syne', sans-serif; font-size: 0.82rem; transition: all 0.2s; }
+    .close-btn:hover { border-color: var(--danger); color: var(--danger); }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-logo"><p class="eyebrow">Beijing 2022</p><h1>PuckVision</h1></div>
+    <a href="index.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+    <a href="compare.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M8 21H3v-5M21 3l-7 7M3 21l7-7"/></svg>Compare Players</a>
+    <a href="leaderboard.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Leaderboard</a>
+    <a href="teams.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Teams</a>
+    <a href="results.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Results</a>
+    <a href="player.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Player Profile</a>
+    <div class="nav-bottom"><div class="nav-user" id="nav-user-email"></div><button class="btn-logout" onclick="logout()">Sign Out</button></div>
+  </nav>
+
+  <main class="main">
+    <div class="page-header fade-up">
+      <p class="eyebrow">National Teams</p>
+      <h2>Team Overview</h2>
+      <p>Click a team card to view the full roster</p>
+    </div>
+
+    <div class="team-cards fade-up-2" id="team-cards">
+      <div class="loading">Loading teams...</div>
+    </div>
+
+    <div class="team-detail card fade-up-3" id="team-detail">
+      <div class="detail-header">
+        <div><div class="detail-title" id="detail-name">—</div><div style="color:var(--muted);font-size:0.82rem;margin-top:4px" id="detail-sub"></div></div>
+        <button class="close-btn" onclick="closeDetail()">Close ✕</button>
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:28px" id="detail-stats"></div>
+      <table class="data-table">
+        <thead><tr><th>Player</th><th>Pos</th><th>GP</th><th>G</th><th>A</th><th>PTS</th><th>PIM</th><th></th></tr></thead>
+        <tbody id="detail-roster"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src="shared.js"></script>
+  <script>
+    let allPlayers = [];
+
+    requireAuth().then(async () => {
+      const res = await fetch(getPlayersEndpoint());
+      allPlayers = await res.json();
+
+      const byCountry = {};
+      allPlayers.forEach(p => {
+        if (!byCountry[p.country]) byCountry[p.country] = [];
+        byCountry[p.country].push(p);
+      });
+
+      document.getElementById('team-cards').innerHTML = Object.entries(byCountry)
+        .sort((a, b) => {
+          const goalsA = a[1].reduce((s,p) => s+(p.G||0), 0);
+          const goalsB = b[1].reduce((s,p) => s+(p.G||0), 0);
+          return goalsB - goalsA;
+        })
+        .map(([country, players]) => {
+          const goals = players.reduce((s,p) => s+(p.G||0), 0);
+          const assists = players.reduce((s,p) => s+(p.A||0), 0);
+          const pts = players.reduce((s,p) => s+(p.PTS||0), 0);
+          const pim = players.reduce((s,p) => s+(p.PIM||0), 0);
+          return `
+            <div class="team-card" onclick="showTeam('${country}')">
+              <div class="team-name">${country}</div>
+              <div class="team-player-count">${players.length} players</div>
+              <div class="team-stats-row">
+                <div class="stat-pill"><span class="val">${goals}</span><span class="lbl">Goals</span></div>
+                <div class="stat-pill"><span class="val">${assists}</span><span class="lbl">Assists</span></div>
+                <div class="stat-pill"><span class="val">${pts}</span><span class="lbl">Points</span></div>
+                <div class="stat-pill"><span class="val">${pim}</span><span class="lbl">PIM</span></div>
+              </div>
+            </div>`;
+        }).join('');
+    });
+
+    function showTeam(country) {
+      document.querySelectorAll('.team-card').forEach(c => c.classList.remove('selected'));
+      event.currentTarget.classList.add('selected');
+
+      const players = allPlayers.filter(p => p.country === country)
+        .sort((a, b) => (b.PTS||0) - (a.PTS||0));
+
+      document.getElementById('detail-name').textContent = country;
+      document.getElementById('detail-sub').textContent = `${players.length} players`;
+
+      const goals = players.reduce((s,p) => s+(p.G||0), 0);
+      const assists = players.reduce((s,p) => s+(p.A||0), 0);
+      const pts = players.reduce((s,p) => s+(p.PTS||0), 0);
+      const pim = players.reduce((s,p) => s+(p.PIM||0), 0);
+
+      document.getElementById('detail-stats').innerHTML = `
+        <div class="stat-pill"><span class="val">${goals}</span><span class="lbl">Goals</span></div>
+        <div class="stat-pill"><span class="val">${assists}</span><span class="lbl">Assists</span></div>
+        <div class="stat-pill"><span class="val">${pts}</span><span class="lbl">Points</span></div>
+        <div class="stat-pill"><span class="val">${pim}</span><span class="lbl">PIM</span></div>`;
+
+      document.getElementById('detail-roster').innerHTML = players.map(p => `
+        <tr>
+          <td style="font-weight:500">${p.name}</td>
+          <td><span class="badge badge-blue">${p.position||'—'}</span></td>
+          <td style="color:var(--muted)">${p.GP??0}</td>
+          <td style="color:var(--accent);font-weight:600">${p.G??0}</td>
+          <td>${p.A??0}</td>
+          <td style="font-weight:600">${p.PTS??0}</td>
+          <td style="color:var(--muted)">${p.PIM??0}</td>
+          <td><a href="player.html?name=${encodeURIComponent(p.name)}" style="color:var(--accent);font-size:0.78rem;text-decoration:none">View →</a></td>
+        </tr>`).join('');
+
+      const detail = document.getElementById('team-detail');
+      detail.classList.add('visible');
+      detail.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function closeDetail() {
+      document.getElementById('team-detail').classList.remove('visible');
+      document.querySelectorAll('.team-card').forEach(c => c.classList.remove('selected'));
+    }
+  </script>
+</body>
+</html>

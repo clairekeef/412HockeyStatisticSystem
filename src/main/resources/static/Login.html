@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PuckVision — Login</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--bg); }
+    .login-wrap { width: 100%; max-width: 420px; padding: 24px; }
+    .login-logo { text-align: center; margin-bottom: 40px; }
+    .login-logo .eyebrow { font-size: 0.65rem; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+    .login-logo h1 { font-family: 'Barlow Condensed', sans-serif; font-size: 3.5rem; font-weight: 800; letter-spacing: 3px; color: #fff; line-height: 1; }
+    .login-logo p { color: var(--muted); font-size: 0.85rem; margin-top: 10px; }
+    .tabs { display: flex; gap: 0; margin-bottom: 28px; background: rgba(255,255,255,0.04); border-radius: 10px; padding: 4px; }
+    .tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; border-radius: 8px; font-size: 0.85rem; font-weight: 500; color: var(--muted); transition: all 0.2s; border: none; background: transparent; font-family: 'Syne', sans-serif; }
+    .tab.active { background: var(--accent); color: #000; font-weight: 600; }
+    .field { margin-bottom: 16px; }
+    .error-msg { color: var(--danger); font-size: 0.82rem; margin-top: 12px; text-align: center; min-height: 20px; }
+    .success-msg { color: var(--success); font-size: 0.82rem; margin-top: 12px; text-align: center; min-height: 20px; }
+    .btn-full { width: 100%; margin-top: 8px; padding: 14px; font-size: 1.05rem; }
+    .divider { height: 1px; background: var(--border); margin: 24px 0; }
+    .ice-line { width: 60px; height: 3px; background: var(--accent); border-radius: 2px; margin: 16px auto 0; opacity: 0.5; }
+  </style>
+</head>
+<body>
+  <div class="login-wrap fade-up">
+    <div class="login-logo">
+      <p class="eyebrow">Beijing 2022</p>
+      <h1>PuckVision</h1>
+      <div class="ice-line"></div>
+      <p>Olympic Hockey Statistics</p>
+    </div>
+
+    <div class="card">
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('login')">Sign In</button>
+        <button class="tab" onclick="switchTab('signup')">Sign Up</button>
+      </div>
+
+      <div id="form-login">
+        <div class="field">
+          <label class="field-label">Email</label>
+          <input type="email" id="login-email" placeholder="you@example.com">
+        </div>
+        <div class="field">
+          <label class="field-label">Password</label>
+          <input type="password" id="login-password" placeholder="••••••••">
+        </div>
+        <button class="btn btn-primary btn-full" onclick="login()">Sign In</button>
+      </div>
+
+      <div id="form-signup" style="display:none">
+        <div class="field">
+          <label class="field-label">Email</label>
+          <input type="email" id="signup-email" placeholder="you@example.com">
+        </div>
+        <div class="field">
+          <label class="field-label">Password</label>
+          <input type="password" id="signup-password" placeholder="Min. 6 characters">
+        </div>
+        <button class="btn btn-primary btn-full" onclick="signup()">Create Account</button>
+      </div>
+
+      <div id="msg" class="error-msg"></div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://obgfwjsuexlqhsmrbpju.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_T9Bp76-AFViD1OFaR-bdhQ_QfotgWyd';
+
+    // Already logged in? Go to dashboard
+    if (sessionStorage.getItem('sb_token')) window.location.href = 'index.html';
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', (i === 0) === (tab === 'login')));
+      document.getElementById('form-login').style.display  = tab === 'login'  ? 'block' : 'none';
+      document.getElementById('form-signup').style.display = tab === 'signup' ? 'block' : 'none';
+      document.getElementById('msg').textContent = '';
+    }
+
+    function showMsg(text, isError = true) {
+      const el = document.getElementById('msg');
+      el.textContent = text;
+      el.className = isError ? 'error-msg' : 'success-msg';
+    }
+
+    async function login() {
+      const email    = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      if (!email || !password) { showMsg('Please fill in all fields.'); return; }
+      try {
+        const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (!res.ok) { showMsg(data.error_description || data.msg || 'Login failed.'); return; }
+        sessionStorage.setItem('sb_token', data.access_token);
+        sessionStorage.setItem('sb_email', email);
+        window.location.href = 'index.html';
+      } catch (e) { showMsg('Network error. Please try again.'); }
+    }
+
+    async function signup() {
+      const email    = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      if (!email || !password) { showMsg('Please fill in all fields.'); return; }
+      if (password.length < 6) { showMsg('Password must be at least 6 characters.'); return; }
+      try {
+        const res = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (!res.ok) { showMsg(data.error_description || data.msg || 'Signup failed.'); return; }
+        showMsg('Account created! Check your email to confirm, then sign in.', false);
+      } catch (e) { showMsg('Network error. Please try again.'); }
+    }
+
+    // Allow Enter key
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const activeTab = document.querySelector('.tab.active').textContent;
+        if (activeTab === 'Sign In') login(); else signup();
+      }
+    });
+  </script>
+</body>
+</html>

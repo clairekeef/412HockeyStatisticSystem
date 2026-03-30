@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PuckVision — Player Profile</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .profile-hero { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 40px; margin-bottom: 28px; display: flex; align-items: center; gap: 40px; }
+    .player-avatar { width: 80px; height: 80px; border-radius: 50%; background: rgba(0,194,255,0.1); border: 2px solid rgba(0,194,255,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .avatar-initials { font-family: 'Barlow Condensed', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--accent); }
+    .player-info { flex: 1; }
+    .player-full-name { font-family: 'Barlow Condensed', sans-serif; font-size: 3rem; font-weight: 800; letter-spacing: 2px; line-height: 1; }
+    .player-meta { display: flex; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
+    .stats-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-bottom: 28px; }
+    .big-stat { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; text-align: center; }
+    .big-stat .n { font-family: 'Barlow Condensed', sans-serif; font-size: 2.8rem; font-weight: 800; line-height: 1; }
+    .big-stat .n.hi { color: var(--accent); }
+    .big-stat .l { font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 16px; }
+    .rank-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; }
+    .rank-row:last-child { border-bottom: none; }
+    .rank-row .rk { font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--muted); min-width: 32px; }
+    .rank-row .rk.hi { color: var(--gold); }
+    .search-wrap { margin-bottom: 28px; position: relative; max-width: 400px; }
+    .search-wrap input { padding-left: 36px; }
+    .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+    .teammates-list { display: flex; flex-direction: column; gap: 6px; }
+    .teammate-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: 8px; font-size: 0.85rem; }
+    .teammate-row a { color: var(--text); text-decoration: none; }
+    .teammate-row a:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-logo"><p class="eyebrow">Beijing 2022</p><h1>PuckVision</h1></div>
+    <a href="index.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+    <a href="compare.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M8 21H3v-5M21 3l-7 7M3 21l7-7"/></svg>Compare Players</a>
+    <a href="leaderboard.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Leaderboard</a>
+    <a href="teams.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Teams</a>
+    <a href="results.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Results</a>
+    <a href="player.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Player Profile</a>
+    <div class="nav-bottom"><div class="nav-user" id="nav-user-email"></div><button class="btn-logout" onclick="logout()">Sign Out</button></div>
+  </nav>
+
+  <main class="main">
+    <div id="search-section" class="fade-up">
+      <div class="page-header">
+        <p class="eyebrow">Profile</p>
+        <h2>Player Profile</h2>
+        <p>Search for a player or click a name from the leaderboard</p>
+      </div>
+      <div class="search-wrap">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="player-search" placeholder="Type a player name..." oninput="searchPlayers()" autocomplete="off">
+      </div>
+      <div id="search-results"></div>
+    </div>
+
+    <div id="profile-section" style="display:none">
+      <div style="margin-bottom:20px">
+        <button class="btn btn-ghost" onclick="clearProfile()" style="font-size:0.82rem;padding:8px 16px">← Back to Search</button>
+      </div>
+
+      <div class="profile-hero fade-up">
+        <div class="player-avatar"><div class="avatar-initials" id="p-initials">—</div></div>
+        <div class="player-info">
+          <div class="player-full-name" id="p-name">—</div>
+          <div class="player-meta" id="p-meta"></div>
+        </div>
+        <div>
+          <a id="compare-link" href="compare.html" class="btn btn-ghost" style="font-size:0.82rem;padding:10px 18px;text-decoration:none">Compare →</a>
+        </div>
+      </div>
+
+      <div class="stats-grid fade-up-2" id="p-stats"></div>
+
+      <div class="two-col fade-up-3">
+        <div class="card">
+          <div class="section-title">Tournament Rankings</div>
+          <div id="p-rankings"></div>
+        </div>
+        <div class="card">
+          <div class="section-title">Teammates</div>
+          <div class="teammates-list" id="p-teammates"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="shared.js"></script>
+  <script>
+    let allPlayers = [];
+
+    requireAuth().then(async () => {
+      const res = await fetch(getPlayersEndpoint());
+      allPlayers = await res.json();
+
+      // Check URL param
+      const params = new URLSearchParams(window.location.search);
+      const nameParam = params.get('name');
+      if (nameParam) {
+        const p = allPlayers.find(p => p.name === nameParam);
+        if (p) showProfile(p);
+      }
+    });
+
+    function searchPlayers() {
+      const q = document.getElementById('player-search').value.toLowerCase();
+      if (q.length < 2) { document.getElementById('search-results').innerHTML = ''; return; }
+      const matches = allPlayers.filter(p => p.name.toLowerCase().includes(q)).slice(0, 8);
+      document.getElementById('search-results').innerHTML = matches.length === 0
+        ? '<div style="color:var(--muted);font-size:0.85rem;padding:12px 0">No players found.</div>'
+        : matches.map(p => `
+            <div onclick='showProfile(${JSON.stringify(p)})' style="padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+              <div>
+                <div style="font-weight:500">${p.name}</div>
+                <div style="font-size:0.78rem;color:var(--muted);margin-top:2px">${p.country} · ${p.position||'—'}</div>
+              </div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:700;color:var(--accent)">${p.PTS??0} PTS</div>
+            </div>`).join('');
+    }
+
+    function showProfile(p) {
+      document.getElementById('search-section').style.display = 'none';
+      document.getElementById('profile-section').style.display = 'block';
+
+      const initials = p.name.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase();
+      document.getElementById('p-initials').textContent = initials;
+      document.getElementById('p-name').textContent = p.name;
+      document.getElementById('p-meta').innerHTML = `
+        <span class="badge badge-blue">${p.country || '—'}</span>
+        <span class="badge badge-blue">${p.position || '—'}</span>`;
+
+      const metrics = [
+        { key:'G',   label:'Goals',    hi: true },
+        { key:'A',   label:'Assists',  hi: false },
+        { key:'PTS', label:'Points',   hi: true },
+        { key:'GP',  label:'Games',    hi: false },
+        { key:'PIM', label:'Pen. Min', hi: false },
+        { key:'PPG', label:'PP Goals', hi: false },
+      ];
+      document.getElementById('p-stats').innerHTML = metrics.map(m => `
+        <div class="big-stat">
+          <div class="n ${m.hi ? 'hi' : ''}">${p[m.key] ?? 0}</div>
+          <div class="l">${m.label}</div>
+        </div>`).join('');
+
+      // Rankings
+      const sorted = { PTS: [...allPlayers].sort((a,b)=>(b.PTS||0)-(a.PTS||0)), G: [...allPlayers].sort((a,b)=>(b.G||0)-(a.G||0)), A: [...allPlayers].sort((a,b)=>(b.A||0)-(a.A||0)) };
+      document.getElementById('p-rankings').innerHTML = Object.entries(sorted).map(([key, arr]) => {
+        const rank = arr.findIndex(x => x.name === p.name) + 1;
+        return `<div class="rank-row"><span>${key === 'PTS' ? 'Points' : key === 'G' ? 'Goals' : 'Assists'} Ranking</span><span class="rk ${rank <= 3 ? 'hi' : ''}">#${rank}</span></div>`;
+      }).join('');
+
+      // Teammates
+      const teammates = allPlayers.filter(t => t.country === p.country && t.name !== p.name).sort((a,b)=>(b.PTS||0)-(a.PTS||0)).slice(0,6);
+      document.getElementById('p-teammates').innerHTML = teammates.map(t => `
+        <div class="teammate-row">
+          <a onclick="showProfile(${JSON.stringify(t).replace(/"/g,'&quot;')})" href="#" onclick="event.preventDefault()">${t.name}</a>
+          <span style="color:var(--muted);font-size:0.78rem">${t.PTS??0} pts</span>
+        </div>`).join('');
+
+      window.history.pushState({}, '', `player.html?name=${encodeURIComponent(p.name)}`);
+    }
+
+    function clearProfile() {
+      document.getElementById('search-section').style.display = 'block';
+      document.getElementById('profile-section').style.display = 'none';
+      window.history.pushState({}, '', 'player.html');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PuckVision — Results</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .filter-row { display: flex; gap: 12px; margin-bottom: 28px; flex-wrap: wrap; align-items: flex-end; }
+    .filter-row .field { min-width: 150px; }
+    .result-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; margin-bottom: 12px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; transition: border-color 0.2s; }
+    .result-card:hover { border-color: rgba(0,194,255,0.3); }
+    .team-side { display: flex; flex-direction: column; }
+    .team-side.right { align-items: flex-end; text-align: right; }
+    .team-nm { font-family: 'Barlow Condensed', sans-serif; font-size: 1.3rem; font-weight: 700; letter-spacing: 1px; }
+    .team-code { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
+    .score-center { text-align: center; }
+    .score-display { font-family: 'Barlow Condensed', sans-serif; font-size: 2.4rem; font-weight: 800; letter-spacing: 4px; color: #fff; line-height: 1; }
+    .score-sep { color: var(--muted); margin: 0 4px; }
+    .result-meta { font-size: 0.7rem; letter-spacing: 1px; color: var(--muted); margin-top: 6px; }
+    .stage-badge { display: inline-block; font-size: 0.6rem; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; background: rgba(255,255,255,0.06); color: var(--muted); margin-top: 4px; }
+    .winner-highlight { color: var(--accent); }
+    .status-final { color: var(--success); }
+    .status-live { color: var(--gold); }
+    .empty { text-align: center; padding: 60px; color: var(--muted); font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-logo"><p class="eyebrow">Beijing 2022</p><h1>PuckVision</h1></div>
+    <a href="index.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+    <a href="compare.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M8 21H3v-5M21 3l-7 7M3 21l7-7"/></svg>Compare Players</a>
+    <a href="leaderboard.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Leaderboard</a>
+    <a href="teams.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Teams</a>
+    <a href="results.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Results</a>
+    <a href="player.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Player Profile</a>
+    <div class="nav-bottom"><div class="nav-user" id="nav-user-email"></div><button class="btn-logout" onclick="logout()">Sign Out</button></div>
+  </nav>
+
+  <main class="main">
+    <div class="page-header fade-up">
+      <p class="eyebrow">Scores</p>
+      <h2>Game Results</h2>
+      <p>All matches from the Beijing 2022 tournament</p>
+    </div>
+
+    <div class="filter-row fade-up-2">
+      <div class="field">
+        <label class="field-label">Stage</label>
+        <select id="filter-stage" onchange="render()"><option value="">All Stages</option></select>
+      </div>
+      <div class="field">
+        <label class="field-label">Team</label>
+        <select id="filter-team" onchange="render()"><option value="">All Teams</option></select>
+      </div>
+      <div class="field">
+        <label class="field-label">Gender</label>
+        <select id="filter-sex" onchange="render()">
+          <option value="">All</option>
+          <option value="M">Men</option>
+          <option value="W">Women</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="results-list" class="fade-up-3">
+      <div class="loading">Loading results...</div>
+    </div>
+  </main>
+
+  <script src="shared.js"></script>
+  <script>
+    let allResults = [];
+
+    requireAuth().then(async () => {
+      try {
+        allResults = await supabaseQuery('results', 'order=time.asc&limit=500');
+
+        // Populate filter dropdowns
+        const stages = [...new Set(allResults.map(r => r.event_stage).filter(Boolean))].sort();
+        const stageSel = document.getElementById('filter-stage');
+        stages.forEach(s => stageSel.innerHTML += `<option value="${s}">${s}</option>`);
+
+        const teams = [...new Set([
+          ...allResults.map(r => r.teamH),
+          ...allResults.map(r => r.teamA)
+        ].filter(Boolean))].sort();
+        const teamSel = document.getElementById('filter-team');
+        teams.forEach(t => teamSel.innerHTML += `<option value="${t}">${t}</option>`);
+
+        render();
+      } catch(e) {
+        document.getElementById('results-list').innerHTML = `<div class="error">Failed to load results: ${e.message}</div>`;
+      }
+    });
+
+    function render() {
+      const stage = document.getElementById('filter-stage').value;
+      const team  = document.getElementById('filter-team').value;
+      const sex   = document.getElementById('filter-sex').value;
+
+      const filtered = allResults.filter(r =>
+        (!stage || r.event_stage === stage) &&
+        (!team  || r.teamH === team || r.teamA === team) &&
+        (!sex   || r.sex === sex)
+      );
+
+      if (filtered.length === 0) {
+        document.getElementById('results-list').innerHTML = '<div class="empty">No results found for selected filters.</div>';
+        return;
+      }
+
+      document.getElementById('results-list').innerHTML = filtered.map(r => {
+        const scoreH = r.scoreTH ?? '—';
+        const scoreA = r.scoreTA ?? '—';
+        const homeWin = scoreH > scoreA;
+        const awayWin = scoreA > scoreH;
+        const date = r.time ? new Date(r.time).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+        const statusClass = r.event_status === 'FINAL' ? 'status-final' : r.event_status === 'LIVE' ? 'status-live' : '';
+
+        return `
+          <div class="result-card">
+            <div class="team-side">
+              <div class="team-nm ${homeWin ? 'winner-highlight' : ''}">${r.teamH || '—'}</div>
+              <div class="team-code">${r.teamH_code || ''}</div>
+            </div>
+            <div class="score-center">
+              <div class="score-display">
+                <span class="${homeWin ? 'winner-highlight' : ''}">${scoreH}</span>
+                <span class="score-sep">—</span>
+                <span class="${awayWin ? 'winner-highlight' : ''}">${scoreA}</span>
+              </div>
+              <div class="result-meta ${statusClass}">${r.event_status || ''}</div>
+              <div class="result-meta">${date}</div>
+              ${r.location ? `<div class="result-meta">${r.location}</div>` : ''}
+              ${r.event_stage ? `<span class="stage-badge">${r.event_stage}</span>` : ''}
+            </div>
+            <div class="team-side right">
+              <div class="team-nm ${awayWin ? 'winner-highlight' : ''}">${r.teamA || '—'}</div>
+              <div class="team-code">${r.teamA_code || ''}</div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+  </script>
+</body>
+</html>

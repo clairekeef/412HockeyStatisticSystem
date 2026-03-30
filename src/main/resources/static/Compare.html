@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PuckVision — Compare</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .compare-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 24px; align-items: start; }
+    .vs-divider { display: flex; align-items: center; justify-content: center; padding-top: 80px; }
+    .vs-badge { font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--muted); letter-spacing: 2px; }
+    .player-select-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+    .player-select-card h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 20px; color: var(--accent); }
+    .field { margin-bottom: 16px; }
+    .result-section { margin-top: 32px; }
+    .result-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; }
+    .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+    .player-name-display { font-family: 'Barlow Condensed', sans-serif; font-size: 1.8rem; font-weight: 800; }
+    .player-country { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+    .vs-center { text-align: center; }
+    .vs-big { font-family: 'Barlow Condensed', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--border); }
+    .metric-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; align-items: center; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .metric-row:last-child { border-bottom: none; }
+    .metric-val { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 700; }
+    .metric-val.p1 { text-align: left; }
+    .metric-val.p2 { text-align: right; }
+    .metric-val.winner { color: var(--accent); }
+    .metric-val.loser { color: var(--muted); opacity: 0.5; }
+    .metric-label { text-align: center; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+    .winner-banner { background: rgba(0,194,255,0.08); border: 1px solid rgba(0,194,255,0.2); border-radius: 12px; padding: 16px 24px; text-align: center; margin-top: 24px; }
+    .winner-banner .wl { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+    .winner-banner .wn { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 800; color: #fff; }
+    .metric-select-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; }
+    .metric-toggle { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 7px 14px; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 0.78rem; cursor: pointer; transition: all 0.2s; }
+    .metric-toggle.on { background: rgba(0,194,255,0.1); border-color: var(--accent); color: var(--accent); }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-logo"><p class="eyebrow">Beijing 2022</p><h1>PuckVision</h1></div>
+    <a href="index.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+    <a href="compare.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M8 21H3v-5M21 3l-7 7M3 21l7-7"/></svg>Compare Players</a>
+    <a href="leaderboard.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Leaderboard</a>
+    <a href="teams.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Teams</a>
+    <a href="results.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Results</a>
+    <a href="player.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Player Profile</a>
+    <div class="nav-bottom"><div class="nav-user" id="nav-user-email"></div><button class="btn-logout" onclick="logout()">Sign Out</button></div>
+  </nav>
+
+  <main class="main">
+    <div class="page-header fade-up">
+      <p class="eyebrow">Head to Head</p>
+      <h2>Compare Players</h2>
+      <p>Select two players and metrics to compare side by side</p>
+    </div>
+
+    <div class="compare-grid fade-up-2">
+      <div class="player-select-card">
+        <h3>Player 1</h3>
+        <div class="field"><label class="field-label">Country</label><select id="country1" onchange="filterPlayers(1)"><option value="">All Countries</option></select></div>
+        <div class="field"><label class="field-label">Player</label><select id="player1"><option value="">Select player...</option></select></div>
+      </div>
+      <div class="vs-divider"><div class="vs-badge">VS</div></div>
+      <div class="player-select-card">
+        <h3>Player 2</h3>
+        <div class="field"><label class="field-label">Country</label><select id="country2" onchange="filterPlayers(2)"><option value="">All Countries</option></select></div>
+        <div class="field"><label class="field-label">Player</label><select id="player2"><option value="">Select player...</option></select></div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;" class="fade-up-3">
+      <label class="field-label">Select Metrics to Compare</label>
+      <div class="metric-select-row" id="metric-toggles"></div>
+      <button class="btn btn-primary" onclick="compare()" style="margin-top:8px;">Compare</button>
+    </div>
+
+    <div class="result-section fade-up-4" id="result-section" style="display:none">
+      <div class="result-card">
+        <div class="result-header">
+          <div><div class="player-name-display" id="r-name1">—</div><div class="player-country" id="r-country1"></div></div>
+          <div class="vs-center"><div class="vs-big">VS</div></div>
+          <div style="text-align:right"><div class="player-name-display" id="r-name2">—</div><div class="player-country" id="r-country2"></div></div>
+        </div>
+        <div id="metric-rows"></div>
+        <div class="winner-banner" id="winner-banner"></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="shared.js"></script>
+  <script>
+    let allPlayers = [];
+    const METRICS = ['G','A','PTS','GP','PIM','PPG'];
+    const METRIC_LABELS = { G:'Goals', A:'Assists', PTS:'Points', GP:'Games', PIM:'Pen. Min', PPG:'PP Goals' };
+    let selectedMetrics = new Set(['G','A','PTS']);
+
+    requireAuth().then(async () => {
+      const res = await fetch(getPlayersEndpoint());
+      allPlayers = await res.json();
+
+      const countries = [...new Set(allPlayers.map(p => p.country).filter(Boolean))].sort();
+      [1,2].forEach(slot => {
+        const sel = document.getElementById('country' + slot);
+        countries.forEach(c => sel.innerHTML += `<option value="${c}">${c}</option>`);
+        populatePlayers(slot, allPlayers);
+      });
+
+      document.getElementById('metric-toggles').innerHTML = METRICS.map(m => `
+        <button class="metric-toggle ${selectedMetrics.has(m) ? 'on' : ''}" onclick="toggleMetric('${m}', this)">${METRIC_LABELS[m]}</button>
+      `).join('');
+    });
+
+    function populatePlayers(slot, players) {
+      const sel = document.getElementById('player' + slot);
+      const cur = sel.value;
+      sel.innerHTML = '<option value="">Select player...</option>';
+      players.forEach(p => sel.innerHTML += `<option value="${p.name}" ${p.name===cur?'selected':''}>${p.name}</option>`);
+    }
+
+    function filterPlayers(slot) {
+      const country = document.getElementById('country' + slot).value;
+      const filtered = country ? allPlayers.filter(p => p.country === country) : allPlayers;
+      populatePlayers(slot, filtered);
+    }
+
+    function toggleMetric(m, btn) {
+      if (selectedMetrics.has(m)) { selectedMetrics.delete(m); btn.classList.remove('on'); }
+      else { selectedMetrics.add(m); btn.classList.add('on'); }
+    }
+
+    function compare() {
+      const n1 = document.getElementById('player1').value;
+      const n2 = document.getElementById('player2').value;
+      if (!n1 || !n2) { alert('Please select both players.'); return; }
+      if (selectedMetrics.size === 0) { alert('Please select at least one metric.'); return; }
+
+      const p1 = allPlayers.find(p => p.name === n1);
+      const p2 = allPlayers.find(p => p.name === n2);
+
+      document.getElementById('r-name1').textContent = p1.name;
+      document.getElementById('r-name2').textContent = p2.name;
+      document.getElementById('r-country1').textContent = p1.country;
+      document.getElementById('r-country2').textContent = p2.country;
+
+      let p1wins = 0, p2wins = 0;
+      const rows = [...selectedMetrics].map(m => {
+        const v1 = p1[m] ?? 0, v2 = p2[m] ?? 0;
+        const c1 = v1 > v2 ? 'winner' : v1 < v2 ? 'loser' : '';
+        const c2 = v2 > v1 ? 'winner' : v2 < v1 ? 'loser' : '';
+        if (v1 > v2) p1wins++; else if (v2 > v1) p2wins++;
+        return `<div class="metric-row">
+          <div class="metric-val p1 ${c1}">${v1}</div>
+          <div class="metric-label">${METRIC_LABELS[m]}</div>
+          <div class="metric-val p2 ${c2}">${v2}</div>
+        </div>`;
+      }).join('');
+
+      document.getElementById('metric-rows').innerHTML = rows;
+
+      const banner = document.getElementById('winner-banner');
+      if (p1wins > p2wins) banner.innerHTML = `<div class="wl">Overall Winner</div><div class="wn">${p1.name}</div>`;
+      else if (p2wins > p1wins) banner.innerHTML = `<div class="wl">Overall Winner</div><div class="wn">${p2.name}</div>`;
+      else banner.innerHTML = `<div class="wl">Result</div><div class="wn">Even Match</div>`;
+
+      document.getElementById('result-section').style.display = 'block';
+      document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

@@ -12,26 +12,29 @@ How to run with maven:
     To run on Windwos in terminal: ./mvnw.cmd spring-boot:run
 
 M03-A04 - Implementing Design Patterns
+
+GROUP DEADLINE DUE SUNDAY APRIL 5TH AT 5PM
+
 - specifies each of the pattern implementations i.e. the class or classes where the patterns are implemented.
 
 Design Patterns
 
 Claire - Strategy Pattern
 
-Avery
+Avery - Observer
 
-Marcela
+Marcela - Builder
 
-Matt
+Matt - Prototype Creational
 
 UI Patterns
 
 Claire - Search Filters
 
-Avery
+Avery - Dashboard
 
-Marcela
+Marcela - Formatting Data
 
-Matt
+Matt- Card
 
 

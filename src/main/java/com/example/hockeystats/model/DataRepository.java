@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.hockeystats.model.Game;
 
 public class DataRepository {
 
@@ -188,6 +189,36 @@ public class DataRepository {
         return getPlayersByCountry(country).stream()
             .mapToDouble(p -> extractMetric(p, metric))
             .sum();
+    }
+
+    public List<Game> getAllResults() {
+        try {
+            String json = SupabaseService.getResults();
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(json);
+            List<Game> games = new ArrayList<>();
+            int id = 1;
+            for (JsonNode node : root) {
+                String teamH       = node.path("teamH").asText("");
+                String teamA       = node.path("teamA").asText("");
+                int    scoreTH     = parseIntSafe(node.path("scoreTH").asText("0"));
+                int    scoreTA     = parseIntSafe(node.path("scoreTA").asText("0"));
+                String eventStage  = node.path("event_stage").asText("");
+                String eventStatus = node.path("event_status").asText("SCHEDULED");
+                String time        = node.path("time").asText("");
+                String location    = node.path("location").asText("");
+                String teamHCode   = node.path("teamH_code").asText("");
+                String teamACode   = node.path("teamA_code").asText("");
+                String sex         = node.path("sex").asText("");
+                games.add(new Game(id++, teamH, teamA, time, location,
+                        eventStage, eventStatus, scoreTH, scoreTA,
+                        teamHCode, teamACode, sex));
+            }
+            return games;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
     }
 
     private double extractMetric(PlayerStats p, String metric) {

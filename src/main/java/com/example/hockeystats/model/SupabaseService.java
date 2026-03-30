@@ -7,8 +7,9 @@ import java.net.http.HttpResponse;
 
 public class SupabaseService {
 
-    private static final String API_KEY = "sb_publishable_T9Bp76-AFViD1OFaR-bdhQ_QfotgWyd";
-    private static final String BASE_URL = "https://obgfwjsuexlqhsmrbpju.supabase.co/rest/v1/players";
+    private static final String API_KEY      = "sb_publishable_T9Bp76-AFViD1OFaR-bdhQ_QfotgWyd";
+    private static final String BASE_URL     = "https://obgfwjsuexlqhsmrbpju.supabase.co/rest/v1/players";
+    private static final String RESULTS_URL  = "https://obgfwjsuexlqhsmrbpju.supabase.co/rest/v1/results";
 
     public static String getAllPlayers() throws Exception {
         return fetchBySex("M");
@@ -16,6 +17,24 @@ public class SupabaseService {
 
     public static String getWomenPlayers() throws Exception {
         return fetchBySex("W");
+    }
+
+    public static String getResults() throws Exception {
+        HttpClient client = HttpClient.newHttpClient();
+        String url = RESULTS_URL
+            + "?select=teamH,teamA,scoreTH,scoreTA,event_stage,event_status,time,location,teamH_code,teamA_code,sex"
+            + "&order=time.asc&limit=500";
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("apikey", API_KEY)
+                .header("Authorization", "Bearer " + API_KEY)
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return response.body();
     }
 
     private static String fetchBySex(String sex) throws Exception {

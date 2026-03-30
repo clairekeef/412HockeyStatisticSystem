@@ -74,7 +74,7 @@
 
     requireAuth().then(async () => {
       try {
-        allResults = await supabaseQuery('hockey_results', 'order=time.asc&limit=500');
+        allResults = await supabaseQuery('results', 'order=time.asc&limit=500');
 
         // Populate filter dropdowns
         const stages = [...new Set(allResults.map(r => r.event_stage).filter(Boolean))].sort();

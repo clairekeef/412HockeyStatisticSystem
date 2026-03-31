@@ -8,20 +8,75 @@
   <style>
     .filter-row { display: flex; gap: 12px; margin-bottom: 28px; flex-wrap: wrap; align-items: flex-end; }
     .filter-row .field { min-width: 150px; }
-    .result-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; margin-bottom: 12px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; transition: border-color 0.2s; }
-    .result-card:hover { border-color: rgba(0,194,255,0.3); }
-    .team-side { display: flex; flex-direction: column; }
-    .team-side.right { align-items: flex-end; text-align: right; }
-    .team-nm { font-family: 'Barlow Condensed', sans-serif; font-size: 1.3rem; font-weight: 700; letter-spacing: 1px; }
-    .team-code { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
-    .score-center { text-align: center; }
-    .score-display { font-family: 'Barlow Condensed', sans-serif; font-size: 2.4rem; font-weight: 800; letter-spacing: 4px; color: #fff; line-height: 1; }
-    .score-sep { color: var(--muted); margin: 0 4px; }
-    .result-meta { font-size: 0.7rem; letter-spacing: 1px; color: var(--muted); margin-top: 6px; }
-    .stage-badge { display: inline-block; font-size: 0.6rem; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; background: rgba(255,255,255,0.06); color: var(--muted); margin-top: 4px; }
-    .winner-highlight { color: var(--accent); }
-    .status-final { color: var(--success); }
-    .status-live { color: var(--gold); }
+
+    .stage-group { margin-bottom: 36px; }
+    .stage-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 14px; padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .stage-header h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--accent); margin: 0;
+    }
+    .stage-count {
+      font-size: 0.65rem; letter-spacing: 1px;
+      color: var(--muted); background: rgba(255,255,255,0.05);
+      padding: 3px 8px; border-radius: 20px;
+    }
+
+    .game-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 18px 24px; margin-bottom: 10px;
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      align-items: center; gap: 20px;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .game-card:hover { border-color: rgba(0,194,255,0.3); transform: translateY(-1px); }
+    .game-card.status-live { border-color: rgba(255,196,0,0.3); }
+
+    .team-side { display: flex; flex-direction: column; gap: 3px; }
+    .team-side.away { align-items: flex-end; text-align: right; }
+
+    .team-code {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.6rem; font-weight: 800; letter-spacing: 3px;
+      color: #fff;
+    }
+    .team-name { font-size: 0.78rem; color: var(--muted); letter-spacing: 0.5px; }
+    .winner .team-code { color: var(--accent); }
+
+    .game-center { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .score-box {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.6rem; font-weight: 800;
+      letter-spacing: 6px; color: #fff; line-height: 1;
+    }
+    .score-sep { color: var(--muted); margin: 0 2px; font-weight: 300; }
+    .score-box.scheduled { font-size: 1rem; letter-spacing: 2px; color: var(--muted); font-weight: 400; }
+
+    .status-badge {
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .badge-final    { background: rgba(0,200,100,0.12); color: #00c864; border: 1px solid rgba(0,200,100,0.25); }
+    .badge-live     { background: rgba(255,196,0,0.12);  color: var(--gold); border: 1px solid rgba(255,196,0,0.3); animation: pulse 1.5s infinite; }
+    .badge-scheduled{ background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border); }
+
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+
+    .game-meta { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.5px; }
+
+    .gender-section { margin-bottom: 48px; }
+    .gender-header {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem;
+      font-weight: 800; letter-spacing: 3px; text-transform: uppercase;
+      color: #fff; margin-bottom: 20px; padding-bottom: 12px;
+      border-bottom: 2px solid var(--accent);
+    }
     .empty { text-align: center; padding: 60px; color: var(--muted); font-size: 0.9rem; }
   </style>
 </head>
@@ -57,14 +112,14 @@
         <label class="field-label">Gender</label>
         <select id="filter-sex" onchange="render()">
           <option value="">All</option>
-          <option value="M">Men</option>
-          <option value="W">Women</option>
+          <option value="Men">Men</option>
+          <option value="Women">Women</option>
         </select>
       </div>
     </div>
 
     <div id="results-list" class="fade-up-3">
-      <div class="loading">Loading results...</div>
+      <div class="loading">Loading games...</div>
     </div>
   </main>
 
@@ -74,10 +129,11 @@
 
     requireAuth().then(async () => {
       try {
-        allResults = await supabaseQuery('results', 'order=time.asc&limit=500');
+        const res = await fetch('/results');
+        allResults = await res.json();
 
         // Populate filter dropdowns
-        const stages = [...new Set(allResults.map(r => r.event_stage).filter(Boolean))].sort();
+        const stages = [...new Set(allResults.map(r => r.eventStage).filter(Boolean))].sort();
         const stageSel = document.getElementById('filter-stage');
         stages.forEach(s => stageSel.innerHTML += `<option value="${s}">${s}</option>`);
 
@@ -90,7 +146,7 @@
 
         render();
       } catch(e) {
-        document.getElementById('results-list').innerHTML = `<div class="error">Failed to load results: ${e.message}</div>`;
+        document.getElementById('results-list').innerHTML = `<div class="error">Failed to load games: ${e.message}</div>`;
       }
     });
 
@@ -100,47 +156,95 @@
       const sex   = document.getElementById('filter-sex').value;
 
       const filtered = allResults.filter(r =>
-        (!stage || r.event_stage === stage) &&
+        (!stage || r.eventStage === stage) &&
         (!team  || r.teamH === team || r.teamA === team) &&
         (!sex   || r.sex === sex)
       );
 
       if (filtered.length === 0) {
-        document.getElementById('results-list').innerHTML = '<div class="empty">No results found for selected filters.</div>';
+        document.getElementById('results-list').innerHTML = '<div class="empty">No games found for selected filters.</div>';
         return;
       }
 
-      document.getElementById('results-list').innerHTML = filtered.map(r => {
-        const scoreH = r.scoreTH ?? '—';
-        const scoreA = r.scoreTA ?? '—';
-        const homeWin = scoreH > scoreA;
-        const awayWin = scoreA > scoreH;
-        const date = r.time ? new Date(r.time).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
-        const statusClass = r.event_status === 'FINAL' ? 'status-final' : r.event_status === 'LIVE' ? 'status-live' : '';
+      // Group by gender then stage, Women first, stages alphabetical within each gender
+      const genderOrder = ['Women', 'Men'];
+      const byGender = {};
+      filtered.forEach(r => {
+        const gender = r.sex || 'Other';
+        const stage  = r.eventStage || 'Other';
+        if (!byGender[gender]) byGender[gender] = {};
+        if (!byGender[gender][stage]) byGender[gender][stage] = [];
+        byGender[gender][stage].push(r);
+      });
 
+      const genders = genderOrder.filter(g => byGender[g]);
+      document.getElementById('results-list').innerHTML = genders.map(gender => {
+        const goldKey = `${gender}'s Gold Medal Game`;
+        const stages = Object.keys(byGender[gender]).sort((a, b) => {
+          if (a === goldKey) return -1;
+          if (b === goldKey) return  1;
+          return a.localeCompare(b);
+        });
         return `
-          <div class="result-card">
-            <div class="team-side">
-              <div class="team-nm ${homeWin ? 'winner-highlight' : ''}">${r.teamH || '—'}</div>
-              <div class="team-code">${r.teamH_code || ''}</div>
-            </div>
-            <div class="score-center">
-              <div class="score-display">
-                <span class="${homeWin ? 'winner-highlight' : ''}">${scoreH}</span>
-                <span class="score-sep">—</span>
-                <span class="${awayWin ? 'winner-highlight' : ''}">${scoreA}</span>
-              </div>
-              <div class="result-meta ${statusClass}">${r.event_status || ''}</div>
-              <div class="result-meta">${date}</div>
-              ${r.location ? `<div class="result-meta">${r.location}</div>` : ''}
-              ${r.event_stage ? `<span class="stage-badge">${r.event_stage}</span>` : ''}
-            </div>
-            <div class="team-side right">
-              <div class="team-nm ${awayWin ? 'winner-highlight' : ''}">${r.teamA || '—'}</div>
-              <div class="team-code">${r.teamA_code || ''}</div>
-            </div>
+          <div class="gender-section">
+            <div class="gender-header">${gender}</div>
+            ${stages.map(stageName => {
+              const games = byGender[gender][stageName];
+              return `
+                <div class="stage-group">
+                  <div class="stage-header">
+                    <h3>${stageName}</h3>
+                    <span class="stage-count">${games.length} game${games.length !== 1 ? 's' : ''}</span>
+                  </div>
+                  ${games.map(r => renderCard(r)).join('')}
+                </div>`;
+            }).join('')}
           </div>`;
       }).join('');
+    }
+
+    function renderCard(r) {
+      const isFinal     = r.eventStatus === 'Finished';
+      const isLive      = r.eventStatus === 'Live';
+      const isScheduled = !isFinal && !isLive;
+
+      const homeWin = isFinal && r.scoreTH > r.scoreTA;
+      const awayWin = isFinal && r.scoreTA > r.scoreTH;
+
+      const date = r.time
+        ? new Date(r.time).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        : '';
+      const time = r.time
+        ? new Date(r.time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+        : '';
+
+      const badgeClass = isFinal ? 'badge-final' : isLive ? 'badge-live' : 'badge-scheduled';
+      const badgeLabel = isFinal ? 'Finished' : isLive ? '● Live' : time || 'Scheduled';
+
+      const scoreDisplay = isScheduled
+        ? `<div class="score-box scheduled">${time || 'TBD'}</div>`
+        : `<div class="score-box">
+             <span class="${homeWin ? 'winner' : ''}">${r.scoreTH ?? '—'}</span>
+             <span class="score-sep">–</span>
+             <span class="${awayWin ? 'winner' : ''}">${r.scoreTA ?? '—'}</span>
+           </div>`;
+
+      return `
+        <div class="game-card ${isLive ? 'status-live' : ''}">
+          <div class="team-side ${homeWin ? 'winner' : ''}">
+            <div class="team-code">${r.teamHCode || r.teamH}</div>
+            <div class="team-name">${r.teamH}</div>
+          </div>
+          <div class="game-center">
+            ${scoreDisplay}
+            <span class="status-badge ${badgeClass}">${badgeLabel}</span>
+            <div class="game-meta">${date}${r.location ? ' · ' + r.location : ''}</div>
+          </div>
+          <div class="team-side away ${awayWin ? 'winner' : ''}">
+            <div class="team-code">${r.teamACode || r.teamA}</div>
+            <div class="team-name">${r.teamA}</div>
+          </div>
+        </div>`;
     }
   </script>
 </body>

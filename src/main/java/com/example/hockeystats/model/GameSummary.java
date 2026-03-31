@@ -171,13 +171,13 @@ public class GameSummary {
             List<GoalEvent> periodGoals = byPeriod.get(p);
             if (periodGoals.isEmpty() && p == 4) continue; // skip OT if no OT goals
             for (GoalEvent g : periodGoals) {
-                if (g.getTeam().equals(game.getHomeTeam())) homeCumulative++;
+                if (g.getTeam().equals(game.getTeamH())) homeCumulative++;
                 else awayCumulative++;
             }
             if (sb.length() > 0) sb.append("  |  ");
             sb.append(String.format("%s: %s %d - %s %d",
-                labels[p - 1], game.getHomeTeam(), homeCumulative,
-                game.getAwayTeam(), awayCumulative));
+                labels[p - 1], game.getTeamH(), homeCumulative,
+                game.getTeamA(), awayCumulative));
         }
         return sb.toString();
     }
@@ -243,13 +243,13 @@ public class GameSummary {
         }
 
         // Goaltending (implied by shots vs score)
-        int homeGoals = game.getHomeScore();
-        int awayGoals = game.getAwayScore();
+        int homeGoals = game.getScoreTH();
+        int awayGoals = game.getScoreTA();
         if (homeStats.getShotsOnGoal() > 0 && awayGoals < (homeStats.getShotsOnGoal() * 0.10)) {
-            insights.add(game.getAwayTeam() + "'s goaltender was exceptional, stopping most high-volume shots.");
+            insights.add(game.getTeamA() + "'s goaltender was exceptional, stopping most high-volume shots.");
         }
         if (awayStats.getShotsOnGoal() > 0 && homeGoals < (awayStats.getShotsOnGoal() * 0.10)) {
-            insights.add(game.getHomeTeam() + "'s goaltender was exceptional, stopping most high-volume shots.");
+            insights.add(game.getTeamH() + "'s goaltender was exceptional, stopping most high-volume shots.");
         }
 
         return insights;
@@ -262,12 +262,12 @@ public class GameSummary {
     public Map<String, Object> toMap() {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("gameId",      game.getGameId());
-        map.put("homeTeam",    game.getHomeTeam());
-        map.put("awayTeam",    game.getAwayTeam());
-        map.put("homeScore",   game.getHomeScore());
-        map.put("awayScore",   game.getAwayScore());
-        map.put("status",      game.getStatus().toString());
-        map.put("round",       game.getRound());
+        map.put("homeTeam",    game.getTeamH());
+        map.put("awayTeam",    game.getTeamA());
+        map.put("homeScore",   game.getScoreTH());
+        map.put("awayScore",   game.getScoreTA());
+        map.put("status",      game.getEventStatus());
+        map.put("round",       game.getEventStage());
         map.put("shotSummary", getShotSummary());
         map.put("ppSummary",   getPowerPlaySummary());
         map.put("periodScore", getPeriodScoreSummary());
@@ -282,10 +282,10 @@ public class GameSummary {
      */
     public void printSummary() {
         System.out.println("=".repeat(60));
-        System.out.println("GAME SUMMARY: " + game.getHomeTeam() + " vs " + game.getAwayTeam());
-        System.out.println("Round: " + game.getRound() + "  |  " + game.getDate() + "  |  " + game.getVenue());
-        System.out.println("Final Score: " + game.getHomeTeam() + " " + game.getHomeScore()
-            + " - " + game.getAwayScore() + " " + game.getAwayTeam());
+        System.out.println("GAME SUMMARY: " + game.getTeamH() + " vs " + game.getTeamA());
+        System.out.println("Round: " + game.getEventStage() + "  |  " + game.getTime() + "  |  " + game.getLocation());
+        System.out.println("Final Score: " + game.getTeamH() + " " + game.getScoreTH()
+            + " - " + game.getScoreTA() + " " + game.getTeamA());
         System.out.println("-".repeat(60));
 
         System.out.println("PERIOD SCORING:");
@@ -384,17 +384,16 @@ public class GameSummary {
 
     // Generic summary for games without detailed hardcoded data
     private static GameSummary buildGenericSummary(Game game) {
-        TeamGameStats home = new TeamGameStats(game.getHomeTeam(), 25, 20, 2, 1, 30, 60, 6, 12, 8);
-        TeamGameStats away = new TeamGameStats(game.getAwayTeam(), 23, 18, 3, 1, 30, 60, 8, 10, 9);
+        TeamGameStats home = new TeamGameStats(game.getTeamH(), 25, 20, 2, 1, 30, 60, 6, 12, 8);
+        TeamGameStats away = new TeamGameStats(game.getTeamA(), 23, 18, 3, 1, 30, 60, 8, 10, 9);
 
         List<GoalEvent> goals = new ArrayList<>();
-        // Add placeholder goals matching the final score
-        for (int i = 0; i < game.getHomeScore(); i++) {
-            goals.add(new GoalEvent(game.getHomeTeam(), "Player " + (i + 1), "Unassisted",
+        for (int i = 0; i < game.getScoreTH(); i++) {
+            goals.add(new GoalEvent(game.getTeamH(), "Player " + (i + 1), "Unassisted",
                 (i % 3) + 1, "10:00", false));
         }
-        for (int i = 0; i < game.getAwayScore(); i++) {
-            goals.add(new GoalEvent(game.getAwayTeam(), "Player " + (i + 1), "Unassisted",
+        for (int i = 0; i < game.getScoreTA(); i++) {
+            goals.add(new GoalEvent(game.getTeamA(), "Player " + (i + 1), "Unassisted",
                 (i % 3) + 1, "15:00", false));
         }
         goals.sort(Comparator.comparingInt(GoalEvent::getPeriod));

@@ -64,7 +64,7 @@ public class Game {
     // ── Derived helpers ──────────────────────────────────────────────────────
 
     public boolean isComplete() {
-        return "FINAL".equalsIgnoreCase(eventStatus);
+        return "Finished".equalsIgnoreCase(eventStatus);
     }
 
     /**
@@ -89,16 +89,16 @@ public class Game {
     public static List<Game> getSampleGames() {
         List<Game> games = new ArrayList<>();
 
-        games.add(new Game(1,  "Canada",  "USA",        "2026-02-10T10:00", "Ice Arena A", "Group A",    "FINAL",     4, 2, "CAN", "USA", "M"));
-        games.add(new Game(2,  "Sweden",  "Finland",    "2026-02-10T14:00", "Ice Arena A", "Group A",    "FINAL",     3, 1, "SWE", "FIN", "M"));
-        games.add(new Game(3,  "Russia",  "Czech Rep.", "2026-02-11T10:00", "Ice Arena B", "Group B",    "FINAL",     2, 2, "RUS", "CZE", "M"));
-        games.add(new Game(4,  "Germany", "Slovakia",   "2026-02-11T14:00", "Ice Arena B", "Group B",    "FINAL",     1, 3, "GER", "SVK", "M"));
-        games.add(new Game(5,  "Canada",  "Sweden",     "2026-02-13T10:00", "Ice Arena A", "Group A",    "FINAL",     5, 2, "CAN", "SWE", "M"));
-        games.add(new Game(6,  "USA",     "Finland",    "2026-02-13T14:00", "Ice Arena A", "Group A",    "FINAL",     3, 3, "USA", "FIN", "M"));
-        games.add(new Game(7,  "Canada",  "Germany",    "2026-02-17T16:00", "Main Arena",  "Quarterfinal","FINAL",    4, 1, "CAN", "GER", "M"));
-        games.add(new Game(8,  "Sweden",  "Russia",     "2026-02-17T20:00", "Main Arena",  "Quarterfinal","FINAL",    2, 3, "SWE", "RUS", "M"));
-        games.add(new Game(9,  "Canada",  "Russia",     "2026-02-20T18:00", "Main Arena",  "Semifinal",  "LIVE",      2, 1, "CAN", "RUS", "M"));
-        games.add(new Game(10, "TBD",     "TBD",        "2026-02-22T20:00", "Main Arena",  "Final",      "SCHEDULED", 0, 0, "",    "",    "M"));
+        games.add(new Game(1,  "Canada",  "USA",        "2026-02-10T10:00", "Ice Arena A", "Group A",    "Finished",     4, 2, "CAN", "USA", "M"));
+        games.add(new Game(2,  "Sweden",  "Finland",    "2026-02-10T14:00", "Ice Arena A", "Group A",    "Finished",     3, 1, "SWE", "FIN", "M"));
+        games.add(new Game(3,  "Russia",  "Czech Rep.", "2026-02-11T10:00", "Ice Arena B", "Group B",    "Finished",     2, 2, "RUS", "CZE", "M"));
+        games.add(new Game(4,  "Germany", "Slovakia",   "2026-02-11T14:00", "Ice Arena B", "Group B",    "Finished",     1, 3, "GER", "SVK", "M"));
+        games.add(new Game(5,  "Canada",  "Sweden",     "2026-02-13T10:00", "Ice Arena A", "Group A",    "Finished",     5, 2, "CAN", "SWE", "M"));
+        games.add(new Game(6,  "USA",     "Finland",    "2026-02-13T14:00", "Ice Arena A", "Group A",    "Finished",     3, 3, "USA", "FIN", "M"));
+        games.add(new Game(7,  "Canada",  "Germany",    "2026-02-17T16:00", "Main Arena",  "Quarterfinal","Finished",    4, 1, "CAN", "GER", "M"));
+        games.add(new Game(8,  "Sweden",  "Russia",     "2026-02-17T20:00", "Main Arena",  "Quarterfinal","Finished",    2, 3, "SWE", "RUS", "M"));
+        games.add(new Game(9,  "Canada",  "Russia",     "2026-02-20T18:00", "Main Arena",  "Semifinal",  "Live",      2, 1, "CAN", "RUS", "M"));
+        games.add(new Game(10, "TBD",     "TBD",        "2026-02-22T20:00", "Main Arena",  "Final",      "Scheduled", 0, 0, "",    "",    "M"));
 
         return games;
     }

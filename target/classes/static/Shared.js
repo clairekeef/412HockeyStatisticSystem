@@ -81,6 +81,35 @@ function switchGender(g) {
   window.location.reload();
 }
 
+// ── Role helpers ─────────────────────────────────────────────
+async function getUserRole() {
+  const cached = sessionStorage.getItem('sb_role');
+  if (cached) return cached;
+  try {
+    const data = await supabaseQuery('profiles', 'select=role&limit=1');
+    const role = (data[0]?.role || 'viewer').toLowerCase();
+    sessionStorage.setItem('sb_role', role);
+    return role;
+  } catch(e) {
+    return 'viewer';
+  }
+}
+
+async function injectCoachNav() {
+  const role = await getUserRole();
+  if (role !== 'coach') return;
+  const nav = document.querySelector('.nav');
+  if (!nav) return;
+  const path = window.location.pathname.split('/').pop();
+  const link = document.createElement('a');
+  link.href = 'gamesummary.html';
+  link.className = 'nav-link' + (path === 'gamesummary.html' ? ' active' : '');
+  link.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 13a9 9 0 1 0 18 0A9 9 0 0 0 2 13z"/><path d="M9 13h6M12 10v6"/><path d="M12 2v3"/></svg>Game Summary`;
+  const navBottom = nav.querySelector('.nav-bottom');
+  if (navBottom) nav.insertBefore(link, navBottom);
+  else nav.appendChild(link);
+}
+
 // ── Nav active link + toggle injection ───────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   const path = window.location.pathname.split('/').pop();
@@ -88,4 +117,5 @@ document.addEventListener('DOMContentLoaded', () => {
     if (a.getAttribute('href') === path) a.classList.add('active');
   });
   injectGenderToggle();
+  injectCoachNav();
 });

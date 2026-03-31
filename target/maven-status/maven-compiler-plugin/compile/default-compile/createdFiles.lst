@@ -6,7 +6,6 @@ com\example\hockeystats\model\GameSummary.class
 com\example\hockeystats\model\PlayerStats.class
 com\example\hockeystats\model\DataRepository.class
 com\example\hockeystats\model\Team.class
-com\example\hockeystats\model\Game$Status.class
 com\example\hockeystats\model\GameSummary$TeamGameStats.class
 com\example\hockeystats\model\Game.class
 com\example\hockeystats\view\Dashboard.class

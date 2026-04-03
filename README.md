@@ -11,6 +11,8 @@ How to run with maven:
     To run on mac in terminal: mvn spring-boot:run
     To run on Windwos in terminal: ./mvnw.cmd spring-boot:run
 
+
+
 M03-A04 - Implementing Design Patterns
 
 GROUP DEADLINE DUE SUNDAY APRIL 5TH AT 5PM
@@ -18,6 +20,7 @@ GROUP DEADLINE DUE SUNDAY APRIL 5TH AT 5PM
 - specifies each of the pattern implementations i.e. the class or classes where the patterns are implemented.
 
 Design Patterns
+----------------
 
 Claire - Strategy Pattern
 
@@ -32,6 +35,7 @@ The Builder pattern I selected is implemented in the Game.java class. There is a
 Matt - Prototype Creational
 
 UI Patterns
+-------------
 
 Claire - Search Filters
 
@@ -41,6 +45,19 @@ Avery - Dashboard
 
 Marcela - Formatting Data
 
+The UI pattern of formatting data is implemented across multiple pages in the system. In Leaderboard.html, a data grid displays player stats such as goals, assists, and points in sortable columns, allowing users to quickly rank and compare players. Dropdowns filter the table by country and position so users only see relevant data. In
+Results.html, game result cards are grouped into lists by stage (Group A, Quarterfinal, etc.) and filtered by team and gender using dropdowns. In Teams.html, each team card expands into a roster table showing individual player stats. In Player.html, a 6-stat grid displays a single player's full statistics once selected. Together, these elements keep the display consistent across the platform and allow users to navigate large amounts of data without being overwhelmed.
+
 Matt- Card
 
-
+_____________________________________________________________________________
+|                 |                   |                 | Classes/Interfaces |
+| Team- Member ID | Team- Member Name | Design Pattern  |  implementing the  |
+|                 |                   | Implemented     |   Design Pattern   |
+-----------------------------------------------------------------------------
+|                 |                   |                 | Game.java          |
+|                 | Marcela Ramirez   | Builder Pattern | Leaderboard.html   |
+|      mfr5829    | Vadillo           | UI: Formatting  | Results.html       |
+|                 |                   | Data            | Teams.html         |
+|                 |                   |                 | Player.html        |
+------------------------------------------------------------------------------

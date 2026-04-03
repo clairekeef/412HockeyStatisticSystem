@@ -40,6 +40,46 @@ public class Game {
         this.sex         = sex;
     }
 
+    // ── Builder ──────────────────────────────────────────────────────────────
+
+    public static class Builder {
+        private final int    gameId;
+        private final String teamH;
+        private final String teamA;
+
+        private String time        = "";
+        private String location    = "";
+        private String eventStage  = "";
+        private String eventStatus = "SCHEDULED";
+        private int    scoreTH     = 0;
+        private int    scoreTA     = 0;
+        private String teamHCode   = "";
+        private String teamACode   = "";
+        private String sex         = "M";
+
+        public Builder(int gameId, String teamH, String teamA) {
+            this.gameId = gameId;
+            this.teamH  = teamH;
+            this.teamA  = teamA;
+        }
+
+        public Builder time(String val)        { this.time        = val; return this; }
+        public Builder location(String val)    { this.location    = val; return this; }
+        public Builder eventStage(String val)  { this.eventStage  = val; return this; }
+        public Builder eventStatus(String val) { this.eventStatus = val; return this; }
+        public Builder scoreTH(int val)        { this.scoreTH     = val; return this; }
+        public Builder scoreTA(int val)        { this.scoreTA     = val; return this; }
+        public Builder teamHCode(String val)   { this.teamHCode   = val; return this; }
+        public Builder teamACode(String val)   { this.teamACode   = val; return this; }
+        public Builder sex(String val)         { this.sex         = val; return this; }
+
+        public Game build() {
+            return new Game(gameId, teamH, teamA, time, location,
+                            eventStage, eventStatus, scoreTH, scoreTA,
+                            teamHCode, teamACode, sex);
+        }
+    }
+
     // ── Getters ─────────────────────────────────────────────────────────────
 
     public int    getGameId()      { return gameId; }

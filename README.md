@@ -25,7 +25,9 @@ I used the Strategy pattern in the DataRepository class of our project using the
 
 Avery - Observer
 
-Marcela - Builder
+Marcela - Builder Pattern
+
+The Builder pattern I selected is implemented in the Game.java class. There is a static Builder class that simplifies adding games by breaking the data into smaller steps. It keeps the data organized by having the gameId, teamA and teamH as final variables to avoid any changes, and the other variables are set into a default status. This means that the gameId and both teams are the minimum requirements to input a new game, as those are always needed to identify the games. Therefore, the variabales that differ in every game are the ones that only require changes. Each method returns "this" to keep the format, which avoids needing to call every element every time. Once all data is collected, build() passes the data into the game constructor to create a Game object. The overall purpose of the builder pattern is to clearly construct objects that have many fields, without requiring all of them.This mirrors a real scenario where a game is first scheduled with only the required info, and the remaining details like score and status are updated as the game is played.
 
 Matt - Prototype Creational
 

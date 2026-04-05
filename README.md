@@ -62,7 +62,7 @@ _____________________________________________________________________________
 |                 |                   |                 | Player.html        |
 ------------------------------------------------------------------------------
 |                 |                   |                    | Game.java          |
-|                 | Claire Keef       | Strategy Pattern   | Compate.html       |
+|                 | Claire Keef       | Strategy Pattern   | Compare.html       |
 |      cek5677    |                   | UI: Search Filters |                    |
 |                 |                   |                    |                    |
 |                 |                   |                    |                    |

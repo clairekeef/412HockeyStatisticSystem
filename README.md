@@ -35,7 +35,8 @@ Marcela - Builder Pattern
 The Builder pattern I selected is implemented in the Game.java class. There is a static Builder class that simplifies adding games by breaking the data into smaller steps. It keeps the data organized by having the gameId, teamA and teamH as final variables to avoid any changes, and the other variables are set into a default status. This means that the gameId and both teams are the minimum requirements to input a new game, as those are always needed to identify the games. Therefore, the variabales that differ in every game are the ones that only require changes. Each method returns "this" to keep the format, which avoids needing to call every element every time. Once all data is collected, build() passes the data into the game constructor to create a Game object. The overall purpose of the builder pattern is to clearly construct objects that have many fields, without requiring all of them.This mirrors a real scenario where a game is first scheduled with only the required info, and the remaining details like score and status are updated as the game is played.
 
 Matt - Prototype Creational Pattern
-The prototype creational pattern that I selected was implemented in 
+
+The prototype creational pattern that I selected was implemented in Team.java. The Team.java file contains a team class with a prototyping method within. This allows the team class to copy an existing team, and create it into a new one instead of needing to make a whole new original team every time. This means that when we go to copy an existing team, everything has already been created and we only need to update the stats and players within that team. This is a great for our project because it boosts the performance and simplifies our code. 
 
 UI Patterns
 -------------
@@ -54,7 +55,8 @@ The UI pattern of formatting data is implemented across multiple pages in the sy
 Results.html, game result cards are grouped into lists by stage (Group A, Quarterfinal, etc.) and filtered by team and gender using dropdowns. In Teams.html, each team card expands into a roster table showing individual player stats. In Player.html, a 6-stat grid displays a single player's full statistics once selected. Together, these elements keep the display consistent across the platform and allow users to navigate large amounts of data without being overwhelmed.
 
 Matt- Cards
-The UI pattern of cards is implemented
+
+The UI pattern of cards is implemented throughout our html files in our system. For example, in Compare.html, there are two cards for the two different players to choose from in order to compare them. The card contains a players name and the country they are from. After you choose to selected two players, a third card appears that showcases the differences between the players. In Teams.html, there are cards for each team that contains information inside that card. The card contains the country's name, goals, assists, and points. After you select one of the countries, another card appears at the bottom of the page that also includes how each player is performing on that team. In index.html, we implemented stat-cards and an additional card for our dashboard. The stat-card we used many times to show the top players and teams in the tournament. We used the other card to show goals by country and a quick navigation section.
 
 _____________________________________________________________________________
 |                 |                   |                 | Classes/Interfaces |
@@ -73,10 +75,10 @@ _____________________________________________________________________________
 |                 |                   |                    |                    |
 |                 |                   |                    |                    |
 ------------------------------------------------------------------------------
-|                 |                   |                    |                    |
-|                 | Matthew Bolger    | Prototype Pattern  |                    |
-|      mmb7354    |                   | UI: Cards          |                    |
-|                 |                   |                    |                    |
+|                 |                   |                    | Team.java          |
+|                 | Matthew Bolger    | Prototype Pattern  | Compare.html       |
+|      mmb7354    |                   | UI: Cards          | Teams.html         |
+|                 |                   |                    | index.html         |
 |                 |                   |                    |                    |
 ------------------------------------------------------------------------------
 

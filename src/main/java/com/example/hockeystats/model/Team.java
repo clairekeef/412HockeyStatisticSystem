@@ -1,5 +1,6 @@
 package com.example.hockeystats.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Team {
@@ -10,6 +11,15 @@ public class Team {
     public Team(String teamCountry, List<String> roster) {
         this.teamCountry = teamCountry;
         this.roster = roster;
+    }
+
+    public Team(Team other) {
+        this.teamCountry = other.teamCountry;
+        this.roster = new ArrayList<>(other.roster);
+    }
+
+    public Team copy() {
+        return new Team(this);
     }
 
     public String getTeamCountry() {

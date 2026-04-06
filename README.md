@@ -78,7 +78,14 @@ _____________________________________________________________________________
 |                 |                   |                    | Team.java          |
 |                 | Matthew Bolger    | Prototype Pattern  | Compare.html       |
 |      mmb7354    |                   | UI: Cards          | Teams.html         |
-|                 |                   |                    | index.html         |
+|                 |                   |                    | index.html   |
 |                 |                   |                    |                    |
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+|                 |                   |                    | dataObserver.java  |
+|                 | Avery Dayal       | Observer Pattern   | dataSubject.java   |
+|      apd5982    |                   | UI: Dashboard      | DataRepository.java|
+|                 |                   |                    | index.html         |
+|                 |                   |                    | DashboardController.java  |
 ------------------------------------------------------------------------------
 

@@ -4,10 +4,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.example.hockeystats.model.Game;
 
-public class DataRepository {
+/**
+ * DataRepository acts as the Subject in the Observer design pattern.
+ * It fetches player data from Supabase and notifies registered
+ * DataObservers when the data has been loaded or refreshed.
+ */
+public class DataRepository implements DataSubject {
 
+    private final List<DataObserver> observers = new ArrayList<>();
     private final Map<String, PlayerStats> playersByName;
     private final Map<String, List<PlayerStats>> playersByCountry;
     private final Map<String, List<PlayerStats>> playersByPosition;
@@ -39,7 +44,33 @@ public class DataRepository {
                     .add(p);
             }
         }
+
+        // Notify all observers that data has been loaded
+        String source = men ? "Supabase (Men)" : "Supabase (Women)";
+        notifyObservers(this.allPlayers.size(), source);
     }
+
+    // ── Observer pattern methods ─────────────────────────────
+
+    @Override
+    public void addObserver(DataObserver observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(DataObserver observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(int playerCount, String source) {
+        System.out.println("DataRepository: notifying " + observers.size() + " observer(s)");
+        for (DataObserver observer : observers) {
+            observer.onDataLoaded(playerCount, source);
+        }
+    }
+
+    // ── Data fetching ────────────────────────────────────────
 
     private List<PlayerStats> fetchPlayers(boolean men) {
         try {
@@ -120,6 +151,8 @@ public class DataRepository {
         catch (Exception e) { return 0; }
     }
 
+    // ── Basic lookups ────────────────────────────────────────
+
     public List<PlayerStats> getAllPlayers() {
         return Collections.unmodifiableList(allPlayers);
     }
@@ -189,36 +222,6 @@ public class DataRepository {
         return getPlayersByCountry(country).stream()
             .mapToDouble(p -> extractMetric(p, metric))
             .sum();
-    }
-
-    public List<Game> getAllResults() {
-        try {
-            String json = SupabaseService.getResults();
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode root = mapper.readTree(json);
-            List<Game> games = new ArrayList<>();
-            int id = 1;
-            for (JsonNode node : root) {
-                String teamH       = node.path("teamH").asText("");
-                String teamA       = node.path("teamA").asText("");
-                int    scoreTH     = parseIntSafe(node.path("scoreTH").asText("0"));
-                int    scoreTA     = parseIntSafe(node.path("scoreTA").asText("0"));
-                String eventStage  = node.path("event_stage").asText("");
-                String eventStatus = node.path("event_status").asText("SCHEDULED");
-                String time        = node.path("time").asText("");
-                String location    = node.path("location").asText("");
-                String teamHCode   = node.path("teamH_code").asText("");
-                String teamACode   = node.path("teamA_code").asText("");
-                String sex         = node.path("sex").asText("");
-                games.add(new Game(id++, teamH, teamA, time, location,
-                        eventStage, eventStatus, scoreTH, scoreTA,
-                        teamHCode, teamACode, sex));
-            }
-            return games;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return List.of();
-        }
     }
 
     private double extractMetric(PlayerStats p, String metric) {

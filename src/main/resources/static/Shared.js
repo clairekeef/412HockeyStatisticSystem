@@ -57,26 +57,19 @@ async function logout() {
 async function deleteAccount() {
   if (!confirm('Are you sure you want to delete your account? This cannot be undone.')) return;
   const token = sessionStorage.getItem('sb_token');
-  const uid   = sessionStorage.getItem('sb_uid');
   try {
-    // Delete their lineups first
-    await fetch(`${SUPABASE_URL}/rest/v1/lineups?created_by=eq.${uid}`, {
+    const res = await fetch('/delete-account', {
       method: 'DELETE',
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` }
+      headers: { 'Authorization': `Bearer ${token}` }
     });
-    // Delete their profile
-    await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${uid}`, {
-      method: 'DELETE',
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` }
-    });
-    // Sign out of Supabase auth
-    await fetch(`${SUPABASE_URL}/auth/v1/logout`, {
-      method: 'POST',
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` }
-    });
-    sessionStorage.clear();
-    alert('Your account has been deleted.');
-    window.location.href = '/login.html';
+    const data = await res.json();
+    if (data.success) {
+      sessionStorage.clear();
+      alert('Your account has been deleted.');
+      window.location.href = '/login.html';
+    } else {
+      alert('Failed to delete account: ' + data.error);
+    }
   } catch(e) {
     alert('Failed to delete account: ' + e.message);
   }

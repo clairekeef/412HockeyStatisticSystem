@@ -1,20 +1,45 @@
 package com.example.hockeystats.controller;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.hockeystats.model.DataObserver;
 import com.example.hockeystats.model.DataRepository;
-import com.example.hockeystats.model.Game;
 import com.example.hockeystats.model.PlayerStats;
 import com.example.hockeystats.view.Dashboard;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.*;
 
 @RestController
-public class DashboardController {
+public class DashboardController implements DataObserver {
 
-    private final DataRepository repo = new DataRepository();
+    private static final String SUPABASE_URL     = "https://obgfwjsuexlqhsmrbpju.supabase.co";
+    private static final String SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9iZ2Z3anN1ZXhscWhzbXJicGp1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDUzMjYyOCwiZXhwIjoyMDkwMTA4NjI4fQ.UvDvb78HjswlhNVoDpe8nVeBCMPjKxYPel6QahIPiCE";
+
+    private final DataRepository repo;
     private final Dashboard dashboard = new Dashboard();
+
+    private int lastPlayerCount = 0;
+    private String lastDataSource = "unknown";
+
+    public DashboardController() {
+        this.repo = new DataRepository();
+        this.repo.addObserver(this);
+    }
+
+    @Override
+    public void onDataLoaded(int playerCount, String source) {
+        this.lastPlayerCount = playerCount;
+        this.lastDataSource  = source;
+        System.out.println("DashboardController notified: "
+            + playerCount + " players loaded from " + source);
+    }
 
     private List<Map<String, Object>> buildPlayerList(List<PlayerStats> players) {
         List<Map<String, Object>> result = new ArrayList<>();
@@ -40,9 +65,9 @@ public class DashboardController {
     }
 
     @GetMapping("/players/women")
-    public List<Map<String, Object>> getWomenPlayers() throws Exception {
-        com.example.hockeystats.model.DataRepository womenRepo =
-            new com.example.hockeystats.model.DataRepository(false);
+    public List<Map<String, Object>> getWomenPlayers() {
+        DataRepository womenRepo = new DataRepository(false);
+        womenRepo.addObserver(this);
         return buildPlayerList(womenRepo.getAllPlayers());
     }
 
@@ -73,5 +98,96 @@ public class DashboardController {
     @GetMapping("/dashboard")
     public Map<String, Object> getTournamentOverview() {
         return dashboard.viewTournamentOverview();
+    }
+
+    @GetMapping("/data-status")
+    public Map<String, Object> getDataStatus() {
+        Map<String, Object> status = new LinkedHashMap<>();
+        status.put("lastPlayerCount", lastPlayerCount);
+        status.put("lastDataSource",  lastDataSource);
+        status.put("observerPattern", "DashboardController is a DataObserver of DataRepository");
+        return status;
+    }
+
+    /**
+     * DELETE /delete-account
+     * Deletes the user's profile, lineups, and auth account from Supabase.
+     * Requires the user's JWT token in the Authorization header.
+     */
+    @DeleteMapping("/delete-account")
+    public Map<String, Object> deleteAccount(@RequestHeader("Authorization") String authHeader) {
+        Map<String, Object> result = new LinkedHashMap<>();
+        try {
+            // Extract the user token from the header
+            String userToken = authHeader.replace("Bearer ", "").trim();
+            HttpClient client = HttpClient.newHttpClient();
+
+            // Step 1 — Get the user's ID from Supabase Auth
+            HttpRequest userReq = HttpRequest.newBuilder()
+                .uri(URI.create(SUPABASE_URL + "/auth/v1/user"))
+                .header("apikey", SERVICE_ROLE_KEY)
+                .header("Authorization", "Bearer " + userToken)
+                .GET()
+                .build();
+            HttpResponse<String> userRes = client.send(userReq, HttpResponse.BodyHandlers.ofString());
+            String userId = extractJsonField(userRes.body(), "id");
+
+            if (userId == null || userId.isBlank()) {
+                result.put("success", false);
+                result.put("error", "Could not identify user");
+                return result;
+            }
+
+            // Step 2 — Delete lineups
+            HttpRequest deleteLineups = HttpRequest.newBuilder()
+                .uri(URI.create(SUPABASE_URL + "/rest/v1/lineups?created_by=eq." + userId))
+                .header("apikey", SERVICE_ROLE_KEY)
+                .header("Authorization", "Bearer " + SERVICE_ROLE_KEY)
+                .DELETE()
+                .build();
+            client.send(deleteLineups, HttpResponse.BodyHandlers.ofString());
+
+            // Step 3 — Delete profile
+            HttpRequest deleteProfile = HttpRequest.newBuilder()
+                .uri(URI.create(SUPABASE_URL + "/rest/v1/profiles?id=eq." + userId))
+                .header("apikey", SERVICE_ROLE_KEY)
+                .header("Authorization", "Bearer " + SERVICE_ROLE_KEY)
+                .DELETE()
+                .build();
+            client.send(deleteProfile, HttpResponse.BodyHandlers.ofString());
+
+            // Step 4 — Delete auth user (requires service role key)
+            HttpRequest deleteAuth = HttpRequest.newBuilder()
+                .uri(URI.create(SUPABASE_URL + "/auth/v1/admin/users/" + userId))
+                .header("apikey", SERVICE_ROLE_KEY)
+                .header("Authorization", "Bearer " + SERVICE_ROLE_KEY)
+                .DELETE()
+                .build();
+            HttpResponse<String> deleteRes = client.send(deleteAuth, HttpResponse.BodyHandlers.ofString());
+
+            if (deleteRes.statusCode() == 200 || deleteRes.statusCode() == 204) {
+                result.put("success", true);
+                result.put("message", "Account fully deleted");
+            } else {
+                result.put("success", false);
+                result.put("error", "Auth deletion failed: " + deleteRes.statusCode());
+            }
+
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("error", e.getMessage());
+        }
+        return result;
+    }
+
+    /** Simple JSON field extractor for flat JSON objects */
+    private String extractJsonField(String json, String field) {
+        String key = "\"" + field + "\":\"";
+        int start = json.indexOf(key);
+        if (start == -1) return null;
+        start += key.length();
+        int end = json.indexOf("\"", start);
+        if (end == -1) return null;
+        return json.substring(start, end);
     }
 }

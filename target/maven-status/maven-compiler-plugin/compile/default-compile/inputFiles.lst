@@ -1,5 +1,7 @@
+/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/DataObserver.java
 /Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/HockeyStatisticsApplication.java
 /Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/DataRepository.java
+/Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/DataSubject.java
 /Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/Game.java
 /Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/controller/DashboardController.java
 /Users/averydayal/412HockeyStatisticSystem/src/main/java/com/example/hockeystats/model/Team.java

@@ -101,14 +101,27 @@
         sessionStorage.setItem('sb_token', data.access_token);
         sessionStorage.setItem('sb_email', email);
         const userId = data.user?.id;
+        console.log('[login] auth response user object:', data.user);
+        console.log('[login] extracted userId:', userId);
         if (userId) {
           const profileRes = await fetch(
             `${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=role&limit=1`,
-            { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${data.access_token}` } }
+            {
+              headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${data.access_token}`,
+                'Accept': 'application/json'
+              }
+            }
           );
           const profiles = await profileRes.json();
-          localStorage.setItem('userRole', profiles[0]?.role || 'fan');
+          console.log('[login] profiles query status:', profileRes.status);
+          console.log('[login] profiles response:', JSON.stringify(profiles));
+          const role = profiles[0]?.role || 'fan';
+          console.log('[login] storing role:', role);
+          localStorage.setItem('userRole', role);
         } else {
+          console.warn('[login] no userId in auth response — defaulting to fan');
           localStorage.setItem('userRole', 'fan');
         }
         window.location.href = 'index.html';

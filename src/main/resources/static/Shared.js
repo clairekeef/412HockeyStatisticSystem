@@ -4,8 +4,8 @@ const SUPABASE_KEY = 'sb_publishable_T9Bp76-AFViD1OFaR-bdhQ_QfotgWyd';
 function getGender() { return sessionStorage.getItem('gender') || 'M'; }
 function setGender(g) { sessionStorage.setItem('gender', g); }
 function getPlayersEndpoint() { return getGender() === 'W' ? '/players/women' : '/players'; }
-function getRole() { return sessionStorage.getItem('sb_role') || 'fan'; }
-function isCoach() { return ['coach','admin'].includes(getRole()); }
+function getRole() { return localStorage.getItem('userRole') || 'fan'; }
+function isCoach() { return getRole() === 'coach'; }
 function isAdmin() { return getRole() === 'admin'; }
 
 async function requireAuth() {
@@ -51,6 +51,7 @@ async function logout() {
     });
   }
   sessionStorage.clear();
+  localStorage.removeItem('userRole');
   window.location.href = '/login.html';
 }
 
@@ -65,6 +66,7 @@ async function deleteAccount() {
     const data = await res.json();
     if (data.success) {
       sessionStorage.clear();
+      localStorage.removeItem('userRole');
       alert('Your account has been deleted.');
       window.location.href = '/login.html';
     } else {

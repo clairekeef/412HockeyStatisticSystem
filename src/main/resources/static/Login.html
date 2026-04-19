@@ -100,6 +100,17 @@
         if (!res.ok) { showMsg(data.error_description || data.msg || 'Login failed.'); return; }
         sessionStorage.setItem('sb_token', data.access_token);
         sessionStorage.setItem('sb_email', email);
+        const userId = data.user?.id;
+        if (userId) {
+          const profileRes = await fetch(
+            `${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=role&limit=1`,
+            { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${data.access_token}` } }
+          );
+          const profiles = await profileRes.json();
+          localStorage.setItem('userRole', profiles[0]?.role || 'fan');
+        } else {
+          localStorage.setItem('userRole', 'fan');
+        }
         window.location.href = 'index.html';
       } catch (e) { showMsg('Network error. Please try again.'); }
     }

@@ -256,7 +256,7 @@
 
     // ── Boot ────────────────────────────────────────────────────
     requireAuth().then(async () => {
-      const role = await getUserRole();
+      const role = getRole();
       if (role !== 'coach') {
         window.location.href = '/index.html';
         return;

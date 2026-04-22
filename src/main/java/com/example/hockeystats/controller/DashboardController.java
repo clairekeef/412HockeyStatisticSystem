@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.hockeystats.model.DataObserver;
 import com.example.hockeystats.model.DataRepository;
+import com.example.hockeystats.model.GameCompare;
 import com.example.hockeystats.model.Lineup;
 import com.example.hockeystats.model.PlayerStats;
 import com.example.hockeystats.view.Dashboard;
@@ -113,6 +114,11 @@ public class DashboardController implements DataObserver {
     @GetMapping("/lineups/sample")
     public Map<String, Object> getSampleLineup() {
         return Lineup.getSampleLineup().toMap();
+    }
+
+    @GetMapping("/game-compare/sample")
+    public Map<String, Object> getSampleGameCompare() {
+        return GameCompare.getSampleData().toMap();
     }
 
     /**

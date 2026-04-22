@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PuckVision — Lineup Builder</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .lineup-layout {
+      display: grid;
+      grid-template-columns: 290px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* ── Roster panel ── */
+    .roster-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      position: sticky;
+      top: 24px;
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
+    }
+    .roster-section-title {
+      font-size: 0.58rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 16px 0 6px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--border);
+    }
+    .roster-section-title:first-of-type { margin-top: 0; }
+    .player-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      cursor: grab;
+      margin-bottom: 3px;
+      transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+      background: rgba(255,255,255,0.02);
+      user-select: none;
+    }
+    .player-card:active { cursor: grabbing; }
+    .player-card:hover  { background: rgba(0,194,255,0.07); border-color: rgba(0,194,255,0.2); }
+    .player-card.used   { opacity: 0.28; cursor: not-allowed; pointer-events: none; }
+    .player-card.dragging { opacity: 0.45; }
+    .player-name  { font-size: 0.8rem; font-weight: 600; color: var(--text); }
+    .player-stats { display: flex; gap: 6px; flex-shrink: 0; }
+    .pstat { font-size: 0.65rem; color: var(--muted); }
+    .pstat span { color: var(--text); font-weight: 600; }
+
+    /* ── Builder panel ── */
+    .builder-panel { display: flex; flex-direction: column; gap: 20px; }
+
+    .lineup-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 24px;
+    }
+    .lineup-section h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text);
+      margin: 0 0 14px 0;
+    }
+
+    .line-row {
+      display: grid;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .line-row:last-child { margin-bottom: 0; }
+    .forward-row { grid-template-columns: 48px 1fr 1fr 1fr; }
+    .defense-row { grid-template-columns: 48px 1fr 1fr; }
+    .goalie-row  { grid-template-columns: 1fr 1fr; }
+
+    .line-label {
+      font-size: 0.58rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* ── Slots ── */
+    .slot {
+      border: 2px dashed rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 8px 12px;
+      min-height: 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .slot.drag-over {
+      border-color: var(--accent);
+      background: rgba(0,194,255,0.07);
+    }
+    .slot.filled {
+      border-style: solid;
+      border-color: rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.03);
+      cursor: pointer;
+    }
+    .slot.filled:hover {
+      border-color: rgba(255,77,109,0.45);
+      background: rgba(255,77,109,0.04);
+    }
+    .slot-label {
+      font-size: 0.52rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
+      margin-bottom: 2px;
+    }
+    .slot.filled .slot-label { color: var(--accent); }
+    .slot-player-name  { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+    .slot-player-stats { font-size: 0.62rem; color: var(--muted); margin-top: 1px; }
+    .slot-empty-hint   { font-size: 0.7rem; color: rgba(255,255,255,0.13); }
+
+    /* ── Toolbar ── */
+    .toolbar {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .toolbar label {
+      font-size: 0.62rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .toolbar input { flex: 1; min-width: 200px; max-width: 360px; }
+    .toolbar-actions { display: flex; gap: 10px; margin-left: auto; }
+
+    .status-bar {
+      font-size: 0.8rem;
+      min-height: 20px;
+      margin-bottom: 12px;
+    }
+
+    /* ── Print ── */
+    @media print {
+      .nav, .toolbar, .roster-panel, .status-bar, .page-header { display: none !important; }
+      .main { margin-left: 0 !important; }
+      .lineup-layout { grid-template-columns: 1fr; }
+      .builder-panel { gap: 10px; }
+      .lineup-section { border: 1px solid #ccc; padding: 10px; page-break-inside: avoid; }
+      .lineup-section h3 { color: #000; }
+      body { background: #fff; color: #000; }
+      .slot { border: 1px solid #bbb; min-height: 44px; }
+      .slot-label { color: #666; }
+      .slot-player-name { color: #000; }
+      .slot-player-stats { color: #444; }
+      .slot-empty-hint { color: #bbb; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-logo"><p class="eyebrow">Beijing 2022</p><h1>PuckVision</h1></div>
+    <a href="index.html"       class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+    <a href="compare.html"     class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M8 21H3v-5M21 3l-7 7M3 21l7-7"/></svg>Compare Players</a>
+    <a href="leaderboard.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Leaderboard</a>
+    <a href="teams.html"       class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Teams</a>
+    <a href="results.html"     class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Games</a>
+    <a href="player.html"      class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Player Profile</a>
+    <a href="gamesummary.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 13a9 9 0 1 0 18 0A9 9 0 0 0 2 13z"/><path d="M9 13h6M12 10v6"/><path d="M12 2v3"/></svg>Game Summary</a>
+    <a href="lineups.html"     class="nav-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Lineups</a>
+    <div class="nav-bottom"><div class="nav-user" id="nav-user-email"></div><button class="btn-logout" onclick="logout()">Sign Out</button></div>
+  </nav>
+
+  <main class="main">
+    <div class="page-header fade-up">
+      <p class="eyebrow">Coach Dashboard</p>
+      <h2>Lineup Builder</h2>
+      <p>Drag players from the roster into lineup slots — USA Men's Team</p>
+    </div>
+
+    <div class="toolbar fade-up-2">
+      <label>Game / Label</label>
+      <input type="text" id="game-label" placeholder="e.g. USA vs Canada — Feb 10">
+      <div class="toolbar-actions">
+        <button class="btn btn-secondary" onclick="clearLineup()">Clear</button>
+        <button class="btn btn-secondary" onclick="window.print()">Print</button>
+      </div>
+    </div>
+
+    <div id="status-bar" class="status-bar"></div>
+
+    <div class="lineup-layout fade-up-2">
+
+      <!-- Roster -->
+      <div class="roster-panel" id="roster-panel">
+        <div style="color:var(--muted);font-size:0.8rem;">Loading roster…</div>
+      </div>
+
+      <!-- Builder -->
+      <div class="builder-panel">
+        <div class="lineup-section">
+          <h3>Forward Lines</h3>
+          <div id="forward-lines"></div>
+        </div>
+        <div class="lineup-section">
+          <h3>Defense Pairs</h3>
+          <div id="defense-pairs"></div>
+        </div>
+        <div class="lineup-section">
+          <h3>Goalies</h3>
+          <div id="goalies"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="shared.js"></script>
+  <script src="lineups.js"></script>
+</body>
+</html>

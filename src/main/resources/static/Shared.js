@@ -129,17 +129,18 @@ function injectCoachNavLinks() {
   const nav = document.querySelector('.nav');
   if (!nav) return;
   const bottom = nav.querySelector('.nav-bottom');
+  const existing = new Set([...nav.querySelectorAll('.nav-link')].map(a => a.getAttribute('href')));
   const coachLinks = document.createElement('div');
   coachLinks.innerHTML = `
-    <a href="lineups.html" class="nav-link" style="color:var(--gold)">
+    ${!existing.has('lineups.html') ? `<a href="lineups.html" class="nav-link" style="color:var(--gold)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       Lineups
-    </a>
-    <a href="game-compare.html" class="nav-link" style="color:var(--gold)">
+    </a>` : ''}
+    ${!existing.has('game-compare.html') ? `<a href="game-compare.html" class="nav-link" style="color:var(--gold)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19v-6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm0 0V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v10m-6 0a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2m0 0V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v14a2 2 0 0 0-2 2h-2a2 2 0 0 0-2-2z"/></svg>
       Game Compare
-    </a>
-    ${isAdmin() ? `<a href="admin.html" class="nav-link" style="color:var(--gold)">
+    </a>` : ''}
+    ${isAdmin() && !existing.has('admin.html') ? `<a href="admin.html" class="nav-link" style="color:var(--gold)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       Admin
     </a>` : ''}

@@ -1,4 +1,5 @@
 # 412HockeyStatisticSystem
+We used SupaBase for our database. 
 
 How to Run without maven:
     Make sure you have Java installed 
